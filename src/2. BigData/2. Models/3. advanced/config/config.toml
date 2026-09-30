@@ -1,0 +1,60 @@
+# Configuration file for Iowa time series forecasting (Advanced)
+# Adds caching, data quality checks, and batch processing
+
+[bigquery]
+project_id = "asi2025"
+dataset = "iowa"
+table = "sales"
+dry_run = false              # Set to true to preview query without executing
+
+[data]
+# Local data file path
+input_file = "data/iowa_sales.csv"
+cache_max_age_days = 7       # Re-fetch if data is older than N days
+
+# Column names
+date_column = "date"
+target_column = "total_amount_sold"
+id_column = "item_name"
+
+# Products to forecast
+products = [
+    "BLACK VELVET",
+    "FIREBALL CINNAMON WHISKEY",
+    "HAWKEYE VODKA",
+    "TITOS HANDMADE VODKA",
+    "FIVE O'CLOCK VODKA"
+]
+
+[data.date_range]
+start = "2023-01-01"
+end = "2025-05-30"
+
+[model]
+# Model persistence path
+path = "autogluon-iowa-advanced"
+
+# Time series configuration
+frequency = "D"              # Daily frequency
+prediction_length = 7        # Forecast 7 days ahead
+eval_metric = "MASE"         # Mean Absolute Scaled Error
+
+# Training configuration
+preset = "medium_quality"    # Options: best_quality, high_quality, medium_quality, fast_training
+time_limit_seconds = 60      # Maximum training time
+
+[training]
+# Validation configuration
+test_size_days = 7          # Hold out last N days for testing
+
+[evaluation]
+# Metrics to calculate
+metrics = ["MASE", "RMSE", "MAE", "MAPE"]
+generate_plots = true        # Generate evaluation plots
+
+[output]
+# Output file paths
+metadata_file = "model_metadata.json"
+predictions_file = "predictions.json"          # Changed to JSON for API compatibility
+evaluation_report = "evaluation_report.json"
+data_quality_report = "data/data_quality_report.json"

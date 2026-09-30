@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./backend
+    container_name: iowa_backend
+    ports:
+      - "8003:8003"
+    environment:
+      - PORT=8003
+    # Health check is now defined in Dockerfile
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: iowa_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://backend:8003
+    depends_on:
+      backend:
+        condition: service_healthy  # Uses health check from backend Dockerfile
+    restart: unless-stopped

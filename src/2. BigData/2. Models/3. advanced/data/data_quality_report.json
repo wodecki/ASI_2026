@@ -1,0 +1,87 @@
+{
+  "generated_at": "2025-10-30T08:38:28.618940",
+  "data_source": {
+    "project": "asi2025",
+    "dataset": "iowa",
+    "table": "sales",
+    "query_date_range": {
+      "start": "2023-01-01",
+      "end": "2024-05-30"
+    }
+  },
+  "basic_stats": {
+    "num_rows": 2033,
+    "num_products": 5,
+    "products": [
+      "TITOS HANDMADE VODKA",
+      "FIREBALL CINNAMON WHISKEY",
+      "FIVE O'CLOCK VODKA",
+      "BLACK VELVET",
+      "HAWKEYE VODKA"
+    ],
+    "date_range": {
+      "start": "2023-01-02 00:00:00",
+      "end": "2024-05-30 00:00:00",
+      "days": 514
+    }
+  },
+  "data_quality": {
+    "missing_values": {
+      "date": 0,
+      "item_name": 0,
+      "total_amount_sold": 0
+    },
+    "duplicates": 0,
+    "negative_values": 0
+  },
+  "sales_statistics": {
+    "total_sales": 9701738.0,
+    "mean_daily_sales_per_product": 4772.128873585833,
+    "median_daily_sales_per_product": 3503.0,
+    "min_sales": 6.0,
+    "max_sales": 19928.0,
+    "std_dev": 4088.9339722772816
+  },
+  "per_product_stats": {
+    "TITOS HANDMADE VODKA": {
+      "num_records": 407,
+      "total_sales": 2295447.0,
+      "mean_sales": 5639.918918918919,
+      "median_sales": 5296.0,
+      "min_sales": 8.0,
+      "max_sales": 18351.0
+    },
+    "FIREBALL CINNAMON WHISKEY": {
+      "num_records": 408,
+      "total_sales": 4412914.0,
+      "mean_sales": 10815.96568627451,
+      "median_sales": 11051.0,
+      "min_sales": 12.0,
+      "max_sales": 19928.0
+    },
+    "FIVE O'CLOCK VODKA": {
+      "num_records": 402,
+      "total_sales": 342321.0,
+      "mean_sales": 851.544776119403,
+      "median_sales": 862.0,
+      "min_sales": 12.0,
+      "max_sales": 2342.0
+    },
+    "BLACK VELVET": {
+      "num_records": 409,
+      "total_sales": 1588204.0,
+      "mean_sales": 3883.1393643031784,
+      "median_sales": 3633.0,
+      "min_sales": 6.0,
+      "max_sales": 13432.0
+    },
+    "HAWKEYE VODKA": {
+      "num_records": 407,
+      "total_sales": 1062852.0,
+      "mean_sales": 2611.4299754299755,
+      "median_sales": 2630.0,
+      "min_sales": 6.0,
+      "max_sales": 4950.0
+    }
+  }
+}

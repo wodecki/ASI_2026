@@ -1,0 +1,25 @@
+# Environment
+.env
+.env.local
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Scripts
+*.sh
+
+# System
+.DS_Store
+Icon

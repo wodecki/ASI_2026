@@ -1,0 +1,13 @@
+[project]
+name = "prefect-examples"
+version = "0.1.0"
+description = "Prefect examples and tutorials - shared environment for all subfolders."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "prefect",
+    "prefect-cloud",
+    "pandas",
+    "tabulate",
+    "pyarrow>=22.0.0",
+]

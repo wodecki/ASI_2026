@@ -1,0 +1,18 @@
+version: "3.9"
+
+volumes:
+  shared_data:
+
+services:
+  app1:
+    build: app_1/.
+    container_name: app1
+    volumes:
+      - shared_data:/app/data_1
+  app2:
+    build: app_2/.
+    container_name: app2
+    depends_on:
+      - "app1"
+    volumes:
+      - shared_data:/app/data_2

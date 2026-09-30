@@ -1,0 +1,60 @@
+{
+  "trained_at": "2025-10-31T13:28:43.319206",
+  "training_time_seconds": 43.47,
+  "data_summary": {
+    "num_samples": 3570,
+    "num_products": 5,
+    "date_range": {
+      "start": "2023-01-02 00:00:00",
+      "end": "2025-05-30 00:00:00"
+    }
+  },
+  "model_config": {
+    "frequency": "D",
+    "prediction_length": 7,
+    "eval_metric": "MASE",
+    "preset": "medium_quality",
+    "time_limit_seconds": 60
+  },
+  "model_performance": {
+    "best_model": "WeightedEnsemble",
+    "num_models_trained": 5
+  },
+  "leaderboard": [
+    {
+      "model": "WeightedEnsemble",
+      "score_val": -0.7289473393444743,
+      "pred_time_val": 4.754460096359253,
+      "fit_time_marginal": 0.18450689315795898,
+      "fit_order": 5
+    },
+    {
+      "model": "SeasonalNaive",
+      "score_val": -0.7296943486107771,
+      "pred_time_val": 2.1568098068237305,
+      "fit_time_marginal": 0.025197267532348633,
+      "fit_order": 2
+    },
+    {
+      "model": "Chronos[bolt_small]",
+      "score_val": -0.9098613009053084,
+      "pred_time_val": 2.5976502895355225,
+      "fit_time_marginal": 2.2748665809631348,
+      "fit_order": 3
+    },
+    {
+      "model": "TemporalFusionTransformer",
+      "score_val": -1.1682634116023387,
+      "pred_time_val": 0.02066206932067871,
+      "fit_time_marginal": 18.012463808059692,
+      "fit_order": 4
+    },
+    {
+      "model": "Naive",
+      "score_val": -1.4260769305513712,
+      "pred_time_val": 4.03850793838501,
+      "fit_time_marginal": 0.0277862548828125,
+      "fit_order": 1
+    }
+  ]
+}

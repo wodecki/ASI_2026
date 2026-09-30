@@ -1,0 +1,671 @@
+{
+  "generated_at": "2025-10-30T08:47:58.558583",
+  "num_products": 35,
+  "results": [
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-05-31 00:00:00'))",
+          "mean": 6086.977330870547,
+          "quantile_0.1": 4323.077142629402,
+          "quantile_0.2": 5112.437342252425,
+          "quantile_0.3": 5130.977637479286,
+          "quantile_0.4": 5765.759591960497,
+          "quantile_0.5": 6086.977330870547,
+          "quantile_0.6": 6616.761987200031,
+          "quantile_0.7": 7702.196148102141,
+          "quantile_0.8": 8422.879036712791,
+          "quantile_0.9": 9148.249864082396
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-06-01 00:00:00'))",
+          "mean": 5748.687334739556,
+          "quantile_0.1": 3102.666126520087,
+          "quantile_0.2": 4172.499544931629,
+          "quantile_0.3": 4480.545682635235,
+          "quantile_0.4": 5381.294488007196,
+          "quantile_0.5": 5748.687334739556,
+          "quantile_0.6": 5865.756748549552,
+          "quantile_0.7": 7329.2378155792285,
+          "quantile_0.8": 8075.878763768674,
+          "quantile_0.9": 9173.698094503214
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-06-02 00:00:00'))",
+          "mean": 2031.643635765981,
+          "quantile_0.1": -638.6663002252848,
+          "quantile_0.2": 418.13818501693225,
+          "quantile_0.3": 1084.1137965280257,
+          "quantile_0.4": 1555.6461896841633,
+          "quantile_0.5": 2031.643635765981,
+          "quantile_0.6": 2377.973074950826,
+          "quantile_0.7": 3041.6099374062796,
+          "quantile_0.8": 3679.6259351173244,
+          "quantile_0.9": 4992.765022715498
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-06-03 00:00:00'))",
+          "mean": 6568.992303880595,
+          "quantile_0.1": 4369.350191558459,
+          "quantile_0.2": 5050.358821700502,
+          "quantile_0.3": 5801.402241744069,
+          "quantile_0.4": 6146.713701670847,
+          "quantile_0.5": 6568.992303880595,
+          "quantile_0.6": 6877.019311546886,
+          "quantile_0.7": 7673.748450306671,
+          "quantile_0.8": 8334.069931263324,
+          "quantile_0.9": 9696.769075016206
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-06-04 00:00:00'))",
+          "mean": 6528.782289537333,
+          "quantile_0.1": 4298.10920259879,
+          "quantile_0.2": 4985.23237609601,
+          "quantile_0.3": 5702.727401712194,
+          "quantile_0.4": 6124.209583688356,
+          "quantile_0.5": 6528.782289537333,
+          "quantile_0.6": 6828.1907192632625,
+          "quantile_0.7": 7675.007145013838,
+          "quantile_0.8": 8434.174572058246,
+          "quantile_0.9": 9760.077797740523
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-06-05 00:00:00'))",
+          "mean": 6515.982667179431,
+          "quantile_0.1": 4268.7259952804225,
+          "quantile_0.2": 4959.696341576913,
+          "quantile_0.3": 5600.464058408357,
+          "quantile_0.4": 6128.520719495812,
+          "quantile_0.5": 6515.982667179431,
+          "quantile_0.6": 6792.3485378977175,
+          "quantile_0.7": 7743.787546092106,
+          "quantile_0.8": 8564.6197847131,
+          "quantile_0.9": 9802.462201322092
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "TITOS HANDMADE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('TITOS HANDMADE VODKA', Timestamp('2024-06-06 00:00:00'))",
+          "mean": 6533.153350571454,
+          "quantile_0.1": 4287.220299633357,
+          "quantile_0.2": 4990.606831983126,
+          "quantile_0.3": 5505.721294007835,
+          "quantile_0.4": 6156.648501642739,
+          "quantile_0.5": 6533.153350571454,
+          "quantile_0.6": 6770.871875952807,
+          "quantile_0.7": 7869.767406341616,
+          "quantile_0.8": 8694.592897419061,
+          "quantile_0.9": 9816.92570357254
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-05-31 00:00:00'))",
+          "mean": 11130.4780894134,
+          "quantile_0.1": 8991.170532464062,
+          "quantile_0.2": 9881.742414799912,
+          "quantile_0.3": 10006.876310590622,
+          "quantile_0.4": 10771.044655114101,
+          "quantile_0.5": 11130.4780894134,
+          "quantile_0.6": 11926.36303128106,
+          "quantile_0.7": 13152.921543040866,
+          "quantile_0.8": 13910.994602039584,
+          "quantile_0.9": 14660.80513183637
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-06-01 00:00:00'))",
+          "mean": 10641.589286933511,
+          "quantile_0.1": 7485.068377258941,
+          "quantile_0.2": 8741.796207343737,
+          "quantile_0.3": 9171.135199983299,
+          "quantile_0.4": 10228.279840854117,
+          "quantile_0.5": 10641.589286933511,
+          "quantile_0.6": 11023.870763652554,
+          "quantile_0.7": 12625.958611310482,
+          "quantile_0.8": 13440.178615912933,
+          "quantile_0.9": 14586.339253920092
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-06-02 00:00:00'))",
+          "mean": 6492.645019014003,
+          "quantile_0.1": 3375.0891288839707,
+          "quantile_0.2": 4612.588694663241,
+          "quantile_0.3": 5393.798881958774,
+          "quantile_0.4": 5946.857631582762,
+          "quantile_0.5": 6492.645019014003,
+          "quantile_0.6": 7067.136675854424,
+          "quantile_0.7": 7743.874777285053,
+          "quantile_0.8": 8510.175380535175,
+          "quantile_0.9": 9889.142849451651
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-06-03 00:00:00'))",
+          "mean": 11608.8611370022,
+          "quantile_0.1": 8946.93169204884,
+          "quantile_0.2": 9823.364381891435,
+          "quantile_0.3": 10700.701356822465,
+          "quantile_0.4": 11142.15622519071,
+          "quantile_0.5": 11608.8611370022,
+          "quantile_0.6": 12173.817147446503,
+          "quantile_0.7": 13040.611645941704,
+          "quantile_0.8": 13807.489605980156,
+          "quantile_0.9": 15271.794457687985
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-06-04 00:00:00'))",
+          "mean": 11619.441175299176,
+          "quantile_0.1": 8921.172464240168,
+          "quantile_0.2": 9819.819096151632,
+          "quantile_0.3": 10651.66388136776,
+          "quantile_0.4": 11169.339668246406,
+          "quantile_0.5": 11619.441175299176,
+          "quantile_0.6": 12147.407642068742,
+          "quantile_0.7": 13077.346002189575,
+          "quantile_0.8": 13960.373084158633,
+          "quantile_0.9": 15401.319230840607
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-06-05 00:00:00'))",
+          "mean": 11594.800947286314,
+          "quantile_0.1": 8884.539524191074,
+          "quantile_0.2": 9787.98118550909,
+          "quantile_0.3": 10528.710427670409,
+          "quantile_0.4": 11163.064211866958,
+          "quantile_0.5": 11594.800947286314,
+          "quantile_0.6": 12073.226296597273,
+          "quantile_0.7": 13127.843508528196,
+          "quantile_0.8": 14084.838162066468,
+          "quantile_0.9": 15438.846962056361
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIREBALL CINNAMON WHISKEY",
+      "predictions": [
+        {
+          "timestamp": "('FIREBALL CINNAMON WHISKEY', Timestamp('2024-06-06 00:00:00'))",
+          "mean": 11651.529210494737,
+          "quantile_0.1": 8949.088266512394,
+          "quantile_0.2": 9860.693245395447,
+          "quantile_0.3": 10456.822117988208,
+          "quantile_0.4": 11230.51928313275,
+          "quantile_0.5": 11651.529210494737,
+          "quantile_0.6": 12063.445067422153,
+          "quantile_0.7": 13293.493291526656,
+          "quantile_0.8": 14257.088838924104,
+          "quantile_0.9": 15491.271767331084
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-05-31 00:00:00'))",
+          "mean": 790.0672771809465,
+          "quantile_0.1": 576.9575989613659,
+          "quantile_0.2": 669.5524739269295,
+          "quantile_0.3": 673.969016853931,
+          "quantile_0.4": 752.2145023743029,
+          "quantile_0.5": 790.0672771809465,
+          "quantile_0.6": 858.5471424416916,
+          "quantile_0.7": 988.8304010943878,
+          "quantile_0.8": 1072.3349767438624,
+          "quantile_0.9": 1156.98537415129
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-06-01 00:00:00'))",
+          "mean": 749.3433547100778,
+          "quantile_0.1": 430.85786629759053,
+          "quantile_0.2": 557.5488854569378,
+          "quantile_0.3": 596.1212773032471,
+          "quantile_0.4": 706.0869951925622,
+          "quantile_0.5": 749.3433547100778,
+          "quantile_0.6": 769.2220801791315,
+          "quantile_0.7": 943.724157855434,
+          "quantile_0.8": 1031.2145279884865,
+          "quantile_0.9": 1159.3518810330265
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-06-02 00:00:00'))",
+          "mean": 302.1613045708608,
+          "quantile_0.1": -18.788106702372538,
+          "quantile_0.2": 107.58142778839556,
+          "quantile_0.3": 187.46232447924874,
+          "quantile_0.4": 244.81279913773284,
+          "quantile_0.5": 302.1613045708608,
+          "quantile_0.6": 347.3235478732514,
+          "quantile_0.7": 425.0811637403842,
+          "quantile_0.8": 502.3553328311397,
+          "quantile_0.9": 656.1446001309746
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-06-03 00:00:00'))",
+          "mean": 846.1080400984166,
+          "quantile_0.1": 582.2448290411829,
+          "quantile_0.2": 663.3231035046281,
+          "quantile_0.3": 753.1606802109872,
+          "quantile_0.4": 797.0148953084328,
+          "quantile_0.5": 846.1080400984166,
+          "quantile_0.6": 887.8116175132174,
+          "quantile_0.7": 982.8869086223206,
+          "quantile_0.8": 1060.8663996963555,
+          "quantile_0.9": 1221.0153790967818
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-06-04 00:00:00'))",
+          "mean": 849.9177620451329,
+          "quantile_0.1": 582.1548698323021,
+          "quantile_0.2": 664.447413597964,
+          "quantile_0.3": 750.2114304927422,
+          "quantile_0.4": 802.8411442673417,
+          "quantile_0.5": 849.9177620451329,
+          "quantile_0.6": 889.8667667552971,
+          "quantile_0.7": 991.0616107636613,
+          "quantile_0.8": 1081.0868276096114,
+          "quantile_0.9": 1237.4579560462937
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-06-05 00:00:00'))",
+          "mean": 846.0178512314619,
+          "quantile_0.1": 576.5662842498566,
+          "quantile_0.2": 659.2517458784804,
+          "quantile_0.3": 735.7763549898241,
+          "quantile_0.4": 800.968237024671,
+          "quantile_0.5": 846.0178512314619,
+          "quantile_0.6": 882.5567766565144,
+          "quantile_0.7": 996.3434300765542,
+          "quantile_0.8": 1093.9081039996045,
+          "quantile_0.9": 1240.0907637330865
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "FIVE O'CLOCK VODKA",
+      "predictions": [
+        {
+          "timestamp": "(\"FIVE O'CLOCK VODKA\", Timestamp('2024-06-06 00:00:00'))",
+          "mean": 845.3547791141575,
+          "quantile_0.1": 576.2960621037546,
+          "quantile_0.2": 660.269514452792,
+          "quantile_0.3": 721.6984496521893,
+          "quantile_0.4": 801.5282746959803,
+          "quantile_0.5": 845.3547791141575,
+          "quantile_0.6": 876.6282659160627,
+          "quantile_0.7": 1008.1864234793849,
+          "quantile_0.8": 1106.3026574535013,
+          "quantile_0.9": 1238.9255839465206
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-05-31 00:00:00'))",
+          "mean": 3967.485647298522,
+          "quantile_0.1": 2755.0438526010307,
+          "quantile_0.2": 3284.9587965746696,
+          "quantile_0.3": 3318.3749688228827,
+          "quantile_0.4": 3742.4132109425022,
+          "quantile_0.5": 3967.485647298522,
+          "quantile_0.6": 4342.566166998047,
+          "quantile_0.7": 5063.187424559562,
+          "quantile_0.8": 5532.799672247227,
+          "quantile_0.9": 6011.284524362956
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-06-01 00:00:00'))",
+          "mean": 3743.124722367626,
+          "quantile_0.1": 1941.5749923908447,
+          "quantile_0.2": 2664.748831702586,
+          "quantile_0.3": 2885.4138543687286,
+          "quantile_0.4": 3487.7765325779246,
+          "quantile_0.5": 3743.124722367626,
+          "quantile_0.6": 3856.971351946146,
+          "quantile_0.7": 4823.92927551667,
+          "quantile_0.8": 5315.3126819718755,
+          "quantile_0.9": 6037.966883222093
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-06-02 00:00:00'))",
+          "mean": 1302.4311599731445,
+          "quantile_0.1": -503.5970492090923,
+          "quantile_0.2": 206.6755294471374,
+          "quantile_0.3": 658.80821545892,
+          "quantile_0.4": 982.2654515440806,
+          "quantile_0.5": 1302.4311599731445,
+          "quantile_0.6": 1568.635076410021,
+          "quantile_0.7": 2003.4009482068514,
+          "quantile_0.8": 2433.2888107628237,
+          "quantile_0.9": 3300.613917800401
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-06-03 00:00:00'))",
+          "mean": 4270.894015102063,
+          "quantile_0.1": 2753.4665032827647,
+          "quantile_0.2": 3232.235539179261,
+          "quantile_0.3": 3738.8457805567905,
+          "quantile_0.4": 3981.356274348031,
+          "quantile_0.5": 4270.894015102063,
+          "quantile_0.6": 4508.476315334855,
+          "quantile_0.7": 5039.453884473996,
+          "quantile_0.8": 5489.409687832726,
+          "quantile_0.9": 6394.724126256078
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-06-04 00:00:00'))",
+          "mean": 4278.928194595595,
+          "quantile_0.1": 2734.8533332167713,
+          "quantile_0.2": 3222.030875334886,
+          "quantile_0.3": 3707.274595715027,
+          "quantile_0.4": 3999.7877272019696,
+          "quantile_0.5": 4278.928194595595,
+          "quantile_0.6": 4508.459164918909,
+          "quantile_0.7": 5074.079531360686,
+          "quantile_0.8": 5592.395868317975,
+          "quantile_0.9": 6478.858791753229
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-06-05 00:00:00'))",
+          "mean": 4249.008460998535,
+          "quantile_0.1": 2690.019386443196,
+          "quantile_0.2": 3181.0135031963086,
+          "quantile_0.3": 3617.056914760249,
+          "quantile_0.4": 3980.35057919084,
+          "quantile_0.5": 4249.008460998535,
+          "quantile_0.6": 4461.349326204668,
+          "quantile_0.7": 5097.570000217778,
+          "quantile_0.8": 5659.0292023395805,
+          "quantile_0.9": 6491.315086213054
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "BLACK VELVET",
+      "predictions": [
+        {
+          "timestamp": "('BLACK VELVET', Timestamp('2024-06-06 00:00:00'))",
+          "mean": 4258.692065610724,
+          "quantile_0.1": 2696.7936356962905,
+          "quantile_0.2": 3196.517009919647,
+          "quantile_0.3": 3551.1456232861606,
+          "quantile_0.4": 3996.217971793926,
+          "quantile_0.5": 4258.692065610724,
+          "quantile_0.6": 4443.58196905887,
+          "quantile_0.7": 5178.784036347152,
+          "quantile_0.8": 5744.643499933392,
+          "quantile_0.9": 6503.848391948497
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-05-31 00:00:00'))",
+          "mean": 2695.771881491451,
+          "quantile_0.1": 2097.3000663247235,
+          "quantile_0.2": 2338.4344722785772,
+          "quantile_0.3": 2383.126160469588,
+          "quantile_0.4": 2597.892518860039,
+          "quantile_0.5": 2695.771881491451,
+          "quantile_0.6": 2933.062190015197,
+          "quantile_0.7": 3276.455577824593,
+          "quantile_0.8": 3480.239265069559,
+          "quantile_0.9": 3674.05474325852
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-06-01 00:00:00'))",
+          "mean": 2544.7346561884474,
+          "quantile_0.1": 1665.3994154543095,
+          "quantile_0.2": 2014.2882650028564,
+          "quantile_0.3": 2140.051674630405,
+          "quantile_0.4": 2432.990531386238,
+          "quantile_0.5": 2544.7346561884474,
+          "quantile_0.6": 2677.4313681183426,
+          "quantile_0.7": 3113.259617726959,
+          "quantile_0.8": 3334.6982592881013,
+          "quantile_0.9": 3635.801096187112
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-06-02 00:00:00'))",
+          "mean": 1405.3539430650615,
+          "quantile_0.1": 549.7507573053679,
+          "quantile_0.2": 892.8991398916405,
+          "quantile_0.3": 1107.8979386155763,
+          "quantile_0.4": 1257.697062096955,
+          "quantile_0.5": 1405.3539430650615,
+          "quantile_0.6": 1587.4590223516493,
+          "quantile_0.7": 1760.5110678911335,
+          "quantile_0.8": 1976.4163397748594,
+          "quantile_0.9": 2339.9920161385976
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-06-03 00:00:00'))",
+          "mean": 2807.664554272668,
+          "quantile_0.1": 2067.1358561901898,
+          "quantile_0.2": 2317.1177265695765,
+          "quantile_0.3": 2561.253353622985,
+          "quantile_0.4": 2683.710714874102,
+          "quantile_0.5": 2807.664554272668,
+          "quantile_0.6": 2991.6005332586365,
+          "quantile_0.7": 3221.6279666838254,
+          "quantile_0.8": 3434.269685808767,
+          "quantile_0.9": 3823.45571878581
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-06-04 00:00:00'))",
+          "mean": 2822.967554577326,
+          "quantile_0.1": 2074.25281858449,
+          "quantile_0.2": 2331.565863246839,
+          "quantile_0.3": 2560.87383496257,
+          "quantile_0.4": 2703.4949223616886,
+          "quantile_0.5": 2822.967554577326,
+          "quantile_0.6": 2993.7055600229446,
+          "quantile_0.7": 3241.6682497475026,
+          "quantile_0.8": 3485.2059692354505,
+          "quantile_0.9": 3868.1794142884246
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-06-05 00:00:00'))",
+          "mean": 2824.758631560762,
+          "quantile_0.1": 2075.68515103229,
+          "quantile_0.2": 2334.4285476641185,
+          "quantile_0.3": 2536.2997650863535,
+          "quantile_0.4": 2710.590521731914,
+          "quantile_0.5": 2824.758631560762,
+          "quantile_0.6": 2979.251391200401,
+          "quantile_0.7": 3261.868525714614,
+          "quantile_0.8": 3525.6633156771322,
+          "quantile_0.9": 3884.8513038311776
+        }
+      ],
+      "num_predictions": 1
+    },
+    {
+      "item_name": "HAWKEYE VODKA",
+      "predictions": [
+        {
+          "timestamp": "('HAWKEYE VODKA', Timestamp('2024-06-06 00:00:00'))",
+          "mean": 2831.633160995225,
+          "quantile_0.1": 2088.184221200092,
+          "quantile_0.2": 2348.4503086223444,
+          "quantile_0.3": 2508.236290871513,
+          "quantile_0.4": 2720.661832460019,
+          "quantile_0.5": 2831.633160995225,
+          "quantile_0.6": 2965.0287067545514,
+          "quantile_0.7": 3296.617971335001,
+          "quantile_0.8": 3562.096057923769,
+          "quantile_0.9": 3888.2269658263685
+        }
+      ],
+      "num_predictions": 1
+    }
+  ]
+}

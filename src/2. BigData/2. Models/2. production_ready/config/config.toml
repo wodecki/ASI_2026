@@ -1,0 +1,51 @@
+# Configuration file for Iowa time series forecasting
+# This separates configuration from code - a production best practice
+
+[bigquery]
+project_id = "asi2025"
+dataset = "iowa"
+table = "sales"
+
+[data]
+# Local data file path
+input_file = "data/iowa_sales.csv"
+
+# Column names
+date_column = "date"
+target_column = "total_amount_sold"
+id_column = "item_name"
+
+# Products to forecast
+products = [
+    "BLACK VELVET",
+    "FIREBALL CINNAMON WHISKEY",
+    "HAWKEYE VODKA",
+    "TITOS HANDMADE VODKA",
+    "FIVE O'CLOCK VODKA"
+]
+
+[data.date_range]
+start = "2023-01-01"
+end = "2025-05-30"
+
+[model]
+# Model persistence path
+path = "autogluon-iowa-production"
+
+# Time series configuration
+frequency = "D"              # Daily frequency
+prediction_length = 7        # Forecast 7 days ahead
+eval_metric = "MASE"         # Mean Absolute Scaled Error
+
+# Training configuration
+preset = "medium_quality"    # Options: best_quality, high_quality, medium_quality, fast_training
+time_limit_seconds = 60      # Maximum training time
+
+[training]
+# Validation configuration
+test_size_days = 7          # Hold out last N days for testing
+
+[output]
+# Output file paths
+metadata_file = "model_metadata.json"
+predictions_file = "predictions.csv"

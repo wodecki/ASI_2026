@@ -1,0 +1,12 @@
+# System files
+.DS_Store
+Icon
+Icon?
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Locust
+*.log

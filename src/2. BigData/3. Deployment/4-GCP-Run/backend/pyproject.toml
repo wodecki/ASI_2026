@@ -1,0 +1,14 @@
+[project]
+name = "iowa-backend"
+version = "0.1.0"
+description = "Iowa sales time series forecasting backend (Docker deployment)"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "autogluon-timeseries>=1.4.0",
+    "fastapi>=0.121.0",
+    "pandas>=2.3.3",
+    "uvicorn>=0.38.0",
+    # NOTE: torch is installed separately in Dockerfile (CPU-only version for smaller image)
+    # For local development, install with: uv add "torch>=2.2.0,<2.3.0"
+    "numpy>=1.24.0,<2.0.0",  # AutoGluon 1.4.0 requires NumPy 1.x (not compatible with 2.x yet)
+]
