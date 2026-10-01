@@ -36,8 +36,8 @@ runs/
 *medium_dataset.csv
 *large_dataset.csv
 
-# AutoGluon model directories
-autogluon-iowa-daily/
+# Trained AutoGluon models (regenerate with the training scripts)
+autogluon-iowa-*/
 
 # Plot outputs
 plots/
