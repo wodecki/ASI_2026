@@ -1,3 +1,37 @@
+.DS_Store
+.env
+.mcp.json
+.screenflow
+
+.claude/
+CLAUDE.md
+
+# Python virtual environments
+.venv/
+venv/
+env/
+.uv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.pyc
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Local development settings
+.env.local
+node_modules
+
+# Run output: call ledgers, fetched OSINT pages, skeleton transcripts.
+# Never committed — it is case data, and some of it is personal data (INV-7).
+runs/
+
 # Large files
 *medium_dataset.csv
 *large_dataset.csv

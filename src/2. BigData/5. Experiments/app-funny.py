@@ -3,14 +3,20 @@ from openai import OpenAI
 import streamlit as st
 from dotenv import load_dotenv
 
-# Load environment variables from .env file (local development)
-load_dotenv()
+# Load environment variables from .env file (local development);
+# override=True: values in .env win over variables already exported in the shell
+load_dotenv(override=True)
 
-# Get API key from environment (NEVER hardcode!)
+# Get API key and model from environment (NEVER hardcode!)
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 
 if not OPENAI_API_KEY:
     st.error("⚠️ OPENAI_API_KEY not found! Please set it in .env file or environment variables.")
+    st.stop()
+
+if not OPENAI_MODEL:
+    st.error("⚠️ OPENAI_MODEL not found! Please set it in .env file or environment variables (e.g. OPENAI_MODEL=gpt-4o-mini).")
     st.stop()
 
 st.title("🎤 Hip-Hop Academic")
@@ -19,7 +25,7 @@ st.caption("Cultural academic teacher answering in hip-hop style, yo!")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-4o-mini"
+    st.session_state["openai_model"] = OPENAI_MODEL
 
 if "messages" not in st.session_state:
     st.session_state.messages = [{

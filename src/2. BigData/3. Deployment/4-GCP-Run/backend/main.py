@@ -1,16 +1,16 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 import pandas as pd
 from autogluon.timeseries import TimeSeriesDataFrame, TimeSeriesPredictor
-
-app = FastAPI()
 
 predictor = None
 train_data = None
 
 
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Runs once at startup: load the model and data before serving requests
     global predictor, train_data
 
     predictor = TimeSeriesPredictor.load("autogluon-iowa-daily")
@@ -22,6 +22,10 @@ async def startup_event():
         id_column="item_name",
         timestamp_column="date"
     )
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")

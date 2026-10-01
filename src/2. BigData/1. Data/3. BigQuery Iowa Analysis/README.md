@@ -16,7 +16,7 @@ This tutorial demonstrates how to perform analytical queries on large datasets u
 - Iowa dataset imported to your BigQuery project
 - Basic SQL knowledge (SELECT, WHERE, GROUP BY, aggregations)
 - Access to Google BigQuery and Google Sheets
-- Dataset location: `[YOUR_PROJECT_ID].iowa.sales` (e.g., `asi2024-415408.iowa.sales`)
+- Dataset location: `[YOUR_PROJECT_ID].iowa.sales` (e.g., `your-gcp-project-id.iowa.sales`)
 
 ---
 
@@ -26,7 +26,7 @@ This tutorial demonstrates how to perform analytical queries on large datasets u
 
 **Iowa Liquor Sales Dataset:**
 - **Source:** Iowa Department of Commerce, Alcoholic Beverages Division
-- **Size:** ~26.7 million rows, ~17 GB
+- **Size:** ~34 million rows, ~17 GB
 - **Time Range:** 2012-01-03 to present (updated regularly)
 - **Granularity:** Individual transactions at retail liquor stores across Iowa
 
@@ -51,7 +51,7 @@ This tutorial demonstrates how to perform analytical queries on large datasets u
 ### Data Characteristics
 
 **Why This Dataset Is "Big Data":**
-- **Volume:** 26+ million records (exceeds typical spreadsheet capacity)
+- **Volume:** 34+ million records (exceeds typical spreadsheet capacity)
 - **Velocity:** Continuously updated with new transactions
 - **Variety:** Mix of categorical (product names, locations) and numerical (sales, volumes) data
 - **Real-world messiness:** Inconsistent naming, missing values, outliers
@@ -79,7 +79,7 @@ SELECT
   bottles_sold,
   sale_dollars
 FROM
-  `asi2024-415408.iowa.sales`
+  `your-gcp-project-id.iowa.sales`
 LIMIT 5
 ```
 
@@ -111,7 +111,7 @@ This is equivalent to `df.head()` in pandas, but executes on BigQuery's distribu
 SELECT
   MIN(date) AS min_date,
   MAX(date) AS max_date
-FROM `asi2024-415408.iowa.sales`
+FROM `your-gcp-project-id.iowa.sales`
 ```
 
 **Expected Output:**
@@ -128,7 +128,7 @@ min_date   | max_date
 - **Implication:** Time series models must account for long-term trends, seasonality, and policy changes
 
 **Why This Query Is Fast:**
-BigQuery uses **columnar storage** and **metadata caching**. The MIN/MAX values are pre-computed statistics, so this query returns instantly even on 26M rows.
+BigQuery uses **columnar storage** and **metadata caching**. The MIN/MAX values are pre-computed statistics, so this query returns instantly even on ~34M rows.
 
 ---
 
@@ -140,7 +140,7 @@ SELECT
   COUNT(DISTINCT item_description) AS unique_items,
   COUNT(DISTINCT store_number) AS unique_stores,
   COUNT(DISTINCT DATE_TRUNC(date, MONTH)) AS total_months
-FROM `asi2024-415408.iowa.sales`
+FROM `your-gcp-project-id.iowa.sales`
 ```
 
 **Expected Output:**
@@ -176,7 +176,7 @@ SELECT
   SUM(bottles_sold) AS total_bottles,
   SUM(sale_dollars) AS total_revenue
 FROM
-  `asi2024-415408.iowa.sales`
+  `your-gcp-project-id.iowa.sales`
 GROUP BY
   item_description
 ORDER BY cnt_transactions DESC
@@ -229,7 +229,7 @@ AS (
       item_description,
       COUNT(item_description) AS cnt_transactions
     FROM
-      `asi2024-415408.iowa.sales`
+      `your-gcp-project-id.iowa.sales`
     GROUP BY
       item_description
     ORDER BY cnt_transactions DESC
@@ -241,7 +241,7 @@ AS (
     item_description AS item_name,
     SUM(bottles_sold) AS total_amount_sold
   FROM
-    `asi2024-415408.iowa.sales`
+    `your-gcp-project-id.iowa.sales`
   WHERE
     date BETWEEN '2023-01-01' AND '2025-05-30'
     AND item_description IN (SELECT item_description FROM topsellingitems)
@@ -329,7 +329,7 @@ SELECT
   COUNT(*) AS total_transactions,
   ROUND(SUM(sale_dollars) / SUM(bottles_sold), 2) AS avg_price_per_bottle
 FROM
-  `asi2024-415408.iowa.sales`
+  `your-gcp-project-id.iowa.sales`
 WHERE
   date BETWEEN '2023-01-01' AND '2025-05-30'
 GROUP BY
@@ -362,7 +362,7 @@ SELECT
   SUM(sale_dollars) AS total_revenue,
   COUNT(DISTINCT store_number) AS active_stores
 FROM
-  `asi2024-415408.iowa.sales`
+  `your-gcp-project-id.iowa.sales`
 WHERE
   date >= '2020-01-01'
 GROUP BY
@@ -385,7 +385,7 @@ FROM (
   SELECT
     date,
     SUM(sale_dollars) AS total
-  FROM `asi2024-415408.iowa.sales`
+  FROM `your-gcp-project-id.iowa.sales`
   WHERE date >= '2023-01-01'
   GROUP BY date
 ) AS daily_sales
@@ -435,12 +435,12 @@ Data → Data connectors → Connect to BigQuery
 
 **3. Authorize BigQuery Access**
 - Click "GET CONNECTED"
-- Select your Google Cloud project (e.g., `asi2024-415408`)
+- Select your Google Cloud project (e.g., `your-gcp-project-id`)
 - Grant necessary permissions
 
 **4. Select Your Dataset**
 ```
-Project: asi2024-415408
+Project: your-gcp-project-id
 Dataset: iowa
 Table: training_data
 ```
@@ -469,7 +469,7 @@ date          | item_name          | total_amount_sold
 Connect to the full `iowa.sales` table:
 ```
 Data → Data connectors → Connect to BigQuery
-Select: asi2024-415408.iowa.sales
+Select: your-gcp-project-id.iowa.sales
 ```
 
 **Important:** Limit the data import to avoid exceeding Google Sheets row limits.
@@ -489,7 +489,7 @@ SELECT
   item_description,
   SUM(sale_dollars) AS total_sales
 FROM
-  `asi2024-415408.iowa.sales`
+  `your-gcp-project-id.iowa.sales`
 WHERE
   date >= '2023-01-01'
   AND item_description IN (
@@ -605,7 +605,7 @@ BigQuery Table → GCS Bucket → Local Machine / Colab / VM
 ```bash
 bq extract \
   --destination_format=CSV \
-  asi2024-415408:iowa.training_data \
+  your-gcp-project-id:iowa.training_data \
   gs://iowa2025/training_data.csv
 ```
 
@@ -622,7 +622,7 @@ gsutil cp gs://iowa2025/training_data.csv ./data/
 
 1. Navigate to table:
    ```
-   BigQuery → asi2024-415408 → iowa → training_data
+   BigQuery → your-gcp-project-id → iowa → training_data
    ```
 
 2. Click **EXPORT** → **Export to Google Cloud Storage**
@@ -648,12 +648,12 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Initialize client
-client = bigquery.Client(project="asi2024-415408")
+client = bigquery.Client(project="your-gcp-project-id")
 
 # Query data
 query = """
 SELECT date, item_name, total_amount_sold
-FROM `asi2024-415408.iowa.training_data`
+FROM `your-gcp-project-id.iowa.training_data`
 ORDER BY item_name, date
 """
 
@@ -706,7 +706,7 @@ BigQuery executes it using the **MapReduce paradigm:**
 
 ### Phase 1: Map
 
-**Action:** Each worker reads a subset of the 26M rows and emits key-value pairs.
+**Action:** Each worker reads a subset of the ~34M rows and emits key-value pairs.
 
 **Example:**
 - Worker 1 processes rows 1-5M → emits `("Black Velvet", 12), ("Fireball", 6), ...`
@@ -746,7 +746,7 @@ BigQuery executes it using the **MapReduce paradigm:**
 ### Why This Matters
 
 **Without distributed computing:**
-- Processing 26M rows on a single machine → 10+ minutes (limited by single CPU core)
+- Processing ~34M rows on a single machine → 10+ minutes (limited by single CPU core)
 - Aggregating 8,453 unique products → memory overflow (8 GB RAM insufficient)
 
 **With BigQuery (distributed):**
@@ -773,7 +773,7 @@ SELECT
   SUM(sale_dollars) AS total_revenue,
   COUNT(*) AS num_transactions,
   ROUND(SUM(sale_dollars) / COUNT(*), 2) AS avg_transaction_value
-FROM `asi2024-415408.iowa.sales`
+FROM `your-gcp-project-id.iowa.sales`
 GROUP BY county
 ORDER BY total_revenue DESC
 LIMIT 10
@@ -818,14 +818,14 @@ WITH store_category_revenue AS (
     city,
     category,
     SUM(sale_dollars) AS category_revenue
-  FROM `asi2024-415408.iowa.sales`
+  FROM `your-gcp-project-id.iowa.sales`
   GROUP BY store_number, store_name, city, category
 ),
 store_total_revenue AS (
   SELECT
     store_number,
     SUM(sale_dollars) AS total_revenue
-  FROM `asi2024-415408.iowa.sales`
+  FROM `your-gcp-project-id.iowa.sales`
   GROUP BY store_number
 )
 SELECT
@@ -857,7 +857,7 @@ WITH product_first_sale AS (
   SELECT
     item_description,
     MIN(date) AS first_sale_date
-  FROM `asi2024-415408.iowa.sales`
+  FROM `your-gcp-project-id.iowa.sales`
   GROUP BY item_description
 )
 ```
@@ -893,7 +893,7 @@ WITH daily_stats AS (
     SUM(sale_dollars) AS daily_revenue,
     AVG(SUM(sale_dollars)) OVER () AS mean_revenue,
     STDDEV(SUM(sale_dollars)) OVER () AS stddev_revenue
-  FROM `asi2024-415408.iowa.sales`
+  FROM `your-gcp-project-id.iowa.sales`
   GROUP BY date
 )
 SELECT
@@ -970,7 +970,7 @@ ORDER BY cnt DESC
 LIMIT 100
 ```
 
-**Benefit:** Subsequent queries run on 100 rows instead of 26M.
+**Benefit:** Subsequent queries run on 100 rows instead of ~34M.
 
 ---
 
@@ -1120,7 +1120,7 @@ After completing this tutorial, you're ready for:
 
 ---
 
-**Course:** ASI_2025 - Machine Learning Operations
+**Course:** ASI 2026 - Machine Learning Operations
 **Module:** 2. BigData / 1. Data Processing
 **Difficulty:** Intermediate
 **Time Required:** 2-3 hours

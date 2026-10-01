@@ -37,27 +37,32 @@ Users get routed to either version (50/50 split) to compare responses.
 4. **Docker**: Running
 5. **Artifact Registry**: Repository created
 
-### Setup OpenAI API Key
+### Setup `.env` (API key, model, GCP settings)
 
-**For local testing:**
+All settings - for local testing **and** for the build/deploy scripts - live in one `.env` file in this directory:
 ```bash
 # Copy template
 cp .env.example .env
 
-# Edit .env and add your key
+# Edit .env and fill in the values
 nano .env
-# Add: OPENAI_API_KEY=sk-...
 ```
 
-**For deployment:**
 ```bash
-# Export key (required by deploy scripts)
-export OPENAI_API_KEY='your-key-here'
+# .env
+OPENAI_API_KEY=sk-...                 # your OpenAI API key
+OPENAI_MODEL=gpt-4o-mini              # chat model used by both chatbot versions
+PROJECT_ID=your-gcp-project-id        # your GCP project ID (see: gcloud projects list)
+REGION=europe-west4
+REPOSITORY=chatbot                    # Artifact Registry repository
+IMAGE_TAG=v1
 ```
+
+The apps (`app-serious.py`, `app-funny.py`) load `.env` with `load_dotenv(override=True)` and show an error if `OPENAI_API_KEY` or `OPENAI_MODEL` is missing. The `build-*.sh`, `deploy-*.sh` and `canary.sh` scripts read the same `.env` and stop with an error if a value they need is empty - no `export` needed.
 
 **Security Note:** API key is NEVER in source code. It's loaded from:
 - Local: `.env` file (git-ignored)
-- Cloud Run: Environment variable (passed during deployment)
+- Cloud Run: Environment variable (passed during deployment by `deploy-*.sh`)
 
 ### Setup GCP
 
@@ -65,13 +70,13 @@ export OPENAI_API_KEY='your-key-here'
 # Login
 gcloud auth login
 
-# Set project
-gcloud config set project asi2025
+# Set project (replace with your project ID)
+gcloud config set project your-gcp-project-id
 
 # Enable APIs
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com
 
-# Create Artifact Registry repository
+# Create Artifact Registry repository (name/location must match REPOSITORY/REGION in .env)
 gcloud artifacts repositories create chatbot \
   --repository-format=docker \
   --location=europe-west4 \
@@ -120,7 +125,7 @@ Both images pushed to Artifact Registry.
 1. Go to **Cloud Run** in GCP Console
 2. Click **Create Service**
 3. Configure:
-   - **Container image URL**: `europe-west4-docker.pkg.dev/asi2025/chatbot/chatbot-serious:v1`
+   - **Container image URL**: `europe-west4-docker.pkg.dev/your-gcp-project-id/chatbot/chatbot-serious:v1`
    - **Service name**: `chatbot-serious`
    - **Region**: `europe-west4`
    - **Authentication**: Allow unauthenticated invocations
@@ -132,6 +137,8 @@ Both images pushed to Artifact Registry.
    - Under "Environment variables":
      - **Name 1**: `OPENAI_API_KEY`
      - **Value 1**: Paste your API key **without quotes** (e.g., `sk-proj-...`)
+     - **Name 2**: `OPENAI_MODEL`
+     - **Value 2**: `gpt-4o-mini` (the app stops with an error without it)
 
 5. Click **Create**
 6. Wait for deployment to complete
@@ -140,8 +147,8 @@ Both images pushed to Artifact Registry.
 
 1. In the `chatbot-serious` service page, click **Edit & deploy new revision**
 2. Change container image:
-   - **Container image URL**: `europe-west4-docker.pkg.dev/asi2025/chatbot/chatbot-funny:v1`
-3. Keep environment variable (OPENAI_API_KEY is already set)
+   - **Container image URL**: `europe-west4-docker.pkg.dev/your-gcp-project-id/chatbot/chatbot-funny:v1`
+3. Keep environment variables (OPENAI_API_KEY and OPENAI_MODEL are already set)
 4. Click **Deploy**
 5. Now you have TWO revisions:
    - `chatbot-serious-00001-xxx` (old)
@@ -183,10 +190,9 @@ Both images pushed to Artifact Registry.
 
 #### Step 2: Deploy Both Versions
 
-```bash
-# IMPORTANT: Export API key first!
-export OPENAI_API_KEY='your-key-here'
+Make sure `OPENAI_API_KEY` and `OPENAI_MODEL` are set in `.env` - the deploy scripts pass both to Cloud Run with `--set-env-vars`.
 
+```bash
 # Deploy serious version
 ./deploy-serious.sh
 
@@ -210,8 +216,8 @@ This displays both URLs and explains the canary strategy.
 
 Get URLs:
 ```bash
-gcloud run services describe chatbot-serious --region europe-west4 --format 'value(status.url)'
-gcloud run services describe chatbot-funny --region europe-west4 --format 'value(status.url)'
+gcloud run services describe chatbot-serious --project your-gcp-project-id --region europe-west4 --format 'value(status.url)'
+gcloud run services describe chatbot-funny --project your-gcp-project-id --region europe-west4 --format 'value(status.url)'
 ```
 
 Open both in browser and ask the same question:
@@ -223,7 +229,7 @@ Open both in browser and ask the same question:
 
 ```
 5. Experiments/
-├── .env.example          # API key template
+├── .env.example          # Template for .env (API key, model, GCP settings)
 ├── .gitignore            # Ignore secrets
 ├── pyproject.toml        # Dependencies
 ├── app-serious.py        # Serious chatbot
@@ -259,14 +265,10 @@ Open both in browser and ask the same question:
 
 ## Troubleshooting
 
-**API key error:**
-```bash
-# Verify key is set
-echo $OPENAI_API_KEY
-
-# If empty, export it
-export OPENAI_API_KEY='sk-...'
-```
+**API key / model error** ("OPENAI_API_KEY not found" or "OPENAI_MODEL not found"):
+- Check that `.env` exists in this directory (`cp .env.example .env`)
+- Check that `OPENAI_API_KEY` and `OPENAI_MODEL` (e.g. `gpt-4o-mini`) are filled in there
+- On Cloud Run: check both variables under the service's "Variables & Secrets" tab
 
 **Build fails:**
 ```bash
@@ -279,8 +281,8 @@ gcloud artifacts repositories list
 
 **Deploy fails:**
 ```bash
-# Check API key is exported
-echo $OPENAI_API_KEY
+# "Set ... in .env" error: fill in the named value in .env
+# (PROJECT_ID, REGION, REPOSITORY, IMAGE_TAG, OPENAI_API_KEY, OPENAI_MODEL)
 
 # Check gcloud is authenticated
 gcloud auth list
@@ -302,14 +304,14 @@ Cloud Run charges:
 
 ```bash
 # Delete services
-gcloud run services delete chatbot-serious --region europe-west4
-gcloud run services delete chatbot-funny --region europe-west4
+gcloud run services delete chatbot-serious --project your-gcp-project-id --region europe-west4
+gcloud run services delete chatbot-funny --project your-gcp-project-id --region europe-west4
 
 # Delete images
 gcloud artifacts docker images delete \
-  europe-west4-docker.pkg.dev/asi2025/chatbot/chatbot-serious:v1
+  europe-west4-docker.pkg.dev/your-gcp-project-id/chatbot/chatbot-serious:v1
 gcloud artifacts docker images delete \
-  europe-west4-docker.pkg.dev/asi2025/chatbot/chatbot-funny:v1
+  europe-west4-docker.pkg.dev/your-gcp-project-id/chatbot/chatbot-funny:v1
 ```
 
 ## Educational Takeaways
@@ -325,40 +327,51 @@ gcloud artifacts docker images delete \
 If you prefer CLI for traffic management (instead of Web GUI):
 
 ```bash
+# Load PROJECT_ID, OPENAI_API_KEY and OPENAI_MODEL from .env
+set -a; source .env; set +a
+
 # Deploy revision 1 (serious) - no traffic initially
 gcloud run deploy chatbot-serious \
-  --image europe-west4-docker.pkg.dev/asi2025/chatbot/chatbot-serious:v1 \
+  --project ${PROJECT_ID} \
+  --image europe-west4-docker.pkg.dev/${PROJECT_ID}/chatbot/chatbot-serious:v1 \
   --region europe-west4 \
-  --set-env-vars OPENAI_API_KEY=${OPENAI_API_KEY} \
+  --port 8080 \
+  --set-env-vars "OPENAI_API_KEY=${OPENAI_API_KEY},OPENAI_MODEL=${OPENAI_MODEL}" \
   --no-traffic \
   --tag serious
 
 # Deploy revision 2 (funny) - no traffic initially
 gcloud run deploy chatbot-serious \
-  --image europe-west4-docker.pkg.dev/asi2025/chatbot/chatbot-funny:v1 \
+  --project ${PROJECT_ID} \
+  --image europe-west4-docker.pkg.dev/${PROJECT_ID}/chatbot/chatbot-funny:v1 \
   --region europe-west4 \
-  --set-env-vars OPENAI_API_KEY=${OPENAI_API_KEY} \
+  --port 8080 \
+  --set-env-vars "OPENAI_API_KEY=${OPENAI_API_KEY},OPENAI_MODEL=${OPENAI_MODEL}" \
   --no-traffic \
   --tag funny
 
 # Split traffic: 90% serious, 10% funny (initial canary)
 gcloud run services update-traffic chatbot-serious \
   --to-revisions serious=90,funny=10 \
+  --project ${PROJECT_ID} \
   --region europe-west4
 
 # Gradually shift: 50/50
 gcloud run services update-traffic chatbot-serious \
   --to-revisions serious=50,funny=50 \
+  --project ${PROJECT_ID} \
   --region europe-west4
 
 # Full rollout: 100% funny
 gcloud run services update-traffic chatbot-serious \
   --to-revisions funny=100 \
+  --project ${PROJECT_ID} \
   --region europe-west4
 
 # Rollback: 100% serious
 gcloud run services update-traffic chatbot-serious \
   --to-revisions serious=100 \
+  --project ${PROJECT_ID} \
   --region europe-west4
 ```
 

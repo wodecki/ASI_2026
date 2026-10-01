@@ -2,7 +2,7 @@
 # Adds caching, data quality checks, and batch processing
 
 [bigquery]
-project_id = "asi2025"
+project_id = "your-gcp-project-id"  # <- replace with your GCP project ID
 dataset = "iowa"
 table = "sales"
 dry_run = false              # Set to true to preview query without executing

@@ -13,7 +13,7 @@ This tutorial demonstrates how to copy large public datasets from Google Cloud P
 
 **Prerequisites:**
 - Active GCP account with billing enabled
-- Project created in Google Cloud Console (e.g., `ASI_2025`)
+- Project created in Google Cloud Console (e.g., `ASI_2026`)
 - Appropriate IAM permissions for BigQuery and Cloud Storage
 
 ---
@@ -55,7 +55,7 @@ Google Cloud Console → BigQuery → + Add Data → Explore public datasets
 
 - Search for: `iowa liquor sales`
 - Public dataset path: `bigquery-public-data.iowa_liquor_sales.sales`
-- **Dataset size:** ~26 million rows, ~17 GB
+- **Dataset size:** ~34 million rows, ~17 GB
 - **Columns:** date, store_number, store_name, address, city, zip_code, county, category, item_name, vendor, bottles_sold, sale_dollars, volume_sold_liters, etc.
 
 **3. Preview the Data**
@@ -206,7 +206,7 @@ sales-000000000029.avro
 A dataset is a container for tables within your project.
 
 ```
-BigQuery → Your Project (e.g., ASI_2025-420908) → ⋮ → Create dataset
+BigQuery → Your Project (e.g., your-gcp-project-id) → ⋮ → Create dataset
 ```
 
 **Dataset Configuration:**
@@ -232,7 +232,7 @@ BigQuery → iowa dataset → ⋮ → Create table
 BigQuery automatically loads all matching files (all shards) into a single table.
 
 **Destination:**
-- **Project:** `ASI_2025-420908` (your project ID)
+- **Project:** `your-gcp-project-id` (your project ID)
 - **Dataset:** `iowa`
 - **Table:** `sales`
 - **Table type:** Native table
@@ -253,7 +253,7 @@ BigQuery automatically loads all matching files (all shards) into a single table
 Click **CREATE TABLE** to start the import job.
 
 **Import Duration:**
-- ~5-10 minutes for 17 GB / 26M rows
+- ~5-10 minutes for 17 GB / ~34M rows
 - Check Job History for progress
 
 **5. Verify Import Success**
@@ -263,11 +263,11 @@ BigQuery → iowa → sales → Details
 ```
 
 **Expected Table Info:**
-- **Table ID:** `ASI_2025-420908.iowa.sales`
+- **Table ID:** `your-gcp-project-id.iowa.sales`
 - **Created:** [timestamp]
 - **Last modified:** [timestamp]
 - **Table expiration:** NEVER
-- **Number of rows:** ~26,702,170
+- **Number of rows:** ~34 million (grows as the public dataset is updated)
 - **Total logical bytes:** ~17 GB
 - **Long-term logical bytes:** 0 B (newly created)
 
@@ -286,10 +286,10 @@ FROM `bigquery-public-data.iowa_liquor_sales.sales`
 **Your imported table:**
 ```sql
 SELECT COUNT(*) AS total_rows
-FROM `ASI_2025-420908.iowa.sales`
+FROM `your-gcp-project-id.iowa.sales`
 ```
 
-**Expected result:** Both queries should return the same count (~26.7 million)
+**Expected result:** Both queries should return the same count (~34 million)
 
 ### Sample Data Comparison
 
@@ -302,7 +302,7 @@ LIMIT 5
 
 -- Your dataset
 SELECT *
-FROM `ASI_2025-420908.iowa.sales`
+FROM `your-gcp-project-id.iowa.sales`
 ORDER BY date DESC
 LIMIT 5
 ```
@@ -314,7 +314,7 @@ Compare column names, data types, and sample values.
 ```sql
 -- Check schema in your table
 SELECT column_name, data_type, is_nullable
-FROM `ASI_2025-420908.iowa.INFORMATION_SCHEMA.COLUMNS`
+FROM `your-gcp-project-id.iowa.INFORMATION_SCHEMA.COLUMNS`
 WHERE table_name = 'sales'
 ORDER BY ordinal_position
 ```
@@ -442,7 +442,7 @@ bq extract \
 bq load \
   --source_format=AVRO \
   --replace \
-  ASI_2025-420908:iowa.sales \
+  your-gcp-project-id:iowa.sales \
   gs://iowa2025/sales-*.avro
 ```
 
@@ -453,7 +453,7 @@ from google.cloud import bigquery
 from google.cloud import storage
 
 # Initialize clients
-bq_client = bigquery.Client(project="ASI_2025-420908")
+bq_client = bigquery.Client(project="your-gcp-project-id")
 storage_client = storage.Client()
 
 # Export BigQuery table to GCS
@@ -586,7 +586,7 @@ This workflow is essential for:
 
 ---
 
-**Course:** ASI_2025 - Machine Learning Operations
+**Course:** ASI 2026 - Machine Learning Operations
 **Module:** 2. BigData / 1. Data Processing
 **Difficulty:** Intermediate
 **Time Required:** 1-2 hours

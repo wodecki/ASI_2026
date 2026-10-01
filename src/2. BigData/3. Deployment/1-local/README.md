@@ -61,5 +61,5 @@ Open http://localhost:8501 in your browser and select a product.
 
 ## Requirements
 
-- Python 3.10 or 3.11
+- Python 3.12 (installed automatically by uv)
 - `uv` package manager

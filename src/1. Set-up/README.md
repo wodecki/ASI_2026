@@ -1,7 +1,7 @@
 # GCP VM Setup Guide - ASI 2025 Course
 
 ## Overview
-This guide walks you through creating and connecting to a Google Cloud Platform (GCP) Virtual Machine for the ASI_2025 course. You will learn three different methods to access your VM: browser-based SSH, command-line interface (CLI), and Visual Studio Code.
+This guide walks you through creating and connecting to a Google Cloud Platform (GCP) Virtual Machine for the ASI 2026 course. You will learn three different methods to access your VM: browser-based SSH, command-line interface (CLI), and Visual Studio Code.
 
 **Prerequisites:**
 - A Google Cloud Platform account with billing enabled
@@ -15,8 +15,9 @@ This guide walks you through creating and connecting to a Google Cloud Platform 
 ### Step 1: Set Up the GCP Project
 
 1. Navigate to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project named `ASI_2025` (or use existing if already created)
+2. Create a new project named `ASI_2026` (or use existing if already created)
 3. Ensure billing is enabled for this project
+4. Note your **project ID** (shown next to the project name in the project picker; GCP usually appends a suffix, e.g. `asi-2026-123456`). Commands in this course use the placeholder `your-gcp-project-id` — replace it with your own project ID.
 
 ### Step 2: Create a Virtual Machine Instance
 
@@ -75,7 +76,7 @@ gcloud init
 
 You will be prompted to:
 - Log in to your Google account
-- Select the `ASI_2025` project
+- Select the `ASI_2026` project
 - Set a default compute zone (choose `europe-west4-a`)
 
 ```bash
@@ -102,7 +103,7 @@ asi-micro  europe-west4-a  e2-micro                   10.x.x.x     34.141.xxx.xx
 
 **Option A - Simple connection:**
 ```bash
-gcloud compute ssh asi-micro --zone=europe-west4-a --project=asi2025
+gcloud compute ssh asi-micro --zone=europe-west4-a --project=your-gcp-project-id
 ```
 
 **Option B - Get the exact command from GCP Console:**
@@ -269,7 +270,7 @@ gcloud compute instances start asi-micro --zone=europe-west4-a
 gcloud compute instances stop asi-micro --zone=europe-west4-a
 
 # SSH into VM
-gcloud compute ssh asi-micro --zone=europe-west4-a --project=asi2025
+gcloud compute ssh asi-micro --zone=europe-west4-a --project=your-gcp-project-id
 
 # Check gcloud configuration
 gcloud config list

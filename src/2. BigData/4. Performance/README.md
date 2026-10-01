@@ -19,7 +19,7 @@ uv sync
 ```
 
 **For Test 1 (Local)**: Docker image built in `3. Deployment/2-docker`
-**For Test 2 (GCP)**: Service deployed in `3. Deployment/3-GCP-Run`
+**For Test 2 (GCP)**: Service deployed in `3. Deployment/4-GCP-Run`, and a `.env` file here (see Test 2, Step 1)
 
 ## Test 1: Local (No Auto-Scaling)
 
@@ -86,18 +86,37 @@ Click **Start swarming**
 
 ## Test 2: GCP Cloud Run (Auto-Scaling)
 
-### Step 1: Verify Service Running
+### Step 1: Configure `.env` and Verify Service Running
+
+`test-gcp.sh` reads its settings from a `.env` file in this directory and stops with an error if any value is missing. Create it from the template:
 
 ```bash
-# Test if service is accessible
-curl https://iowa-backend-850710718243.europe-west4.run.app/items
+cp .env.example .env
+```
+
+```bash
+# .env
+GCP_URL=https://iowa-backend-XXXXXXXXXX.europe-west4.run.app   # your service URL (printed by deploy.sh)
+PROJECT_ID=your-gcp-project-id                                 # used for the metrics link
+REGION=europe-west4
+SERVICE_NAME=iowa-backend
+```
+
+If you don't have the URL at hand:
+```bash
+gcloud run services describe iowa-backend --project your-gcp-project-id --region europe-west4 --format 'value(status.url)'
+```
+
+Test if the service is accessible:
+```bash
+source .env && curl "${GCP_URL}/items"
 ```
 
 If not deployed, deploy it first:
 ```bash
-cd ../3.\ Deployment/3-GCP-Run/backend
+cd ../3.\ Deployment/4-GCP-Run/backend
 ./deploy.sh
-cd ../../4.\ Performance
+cd ../../../4.\ Performance
 ```
 
 ### Step 2: Run Load Test
@@ -117,7 +136,7 @@ Browser opens at: **http://localhost:8089**
 - **Spawn rate**: `10`
   - Faster ramp-up to trigger auto-scaling quickly
   - GCP detects load and spawns containers
-- **Host**: Pre-filled as `https://iowa-backend-850710718243.europe-west4.run.app`
+- **Host**: Pre-filled with `GCP_URL` from `.env`
 
 Click **Start swarming**
 
@@ -137,9 +156,9 @@ Click **Start swarming**
 - **RPS**: Increases to ~12-15
 - **Failures**: Minimal (<1%)
 
-**In GCP Console (open in another tab):**
+**In GCP Console (open in another tab)** - `test-gcp.sh` prints this link filled in from `.env`:
 ```
-https://console.cloud.google.com/run/detail/europe-west4/iowa-backend-2/metrics
+https://console.cloud.google.com/run/detail/${REGION}/${SERVICE_NAME}/metrics?project=${PROJECT_ID}
 ```
 
 Watch:
@@ -189,7 +208,8 @@ Watch:
 
 - **`locustfile.py`**: Load test definition (what requests to make)
 - **`test-local.sh`**: Test local Docker container
-- **`test-gcp.sh`**: Test GCP Cloud Run
+- **`test-gcp.sh`**: Test GCP Cloud Run (reads `.env`)
+- **`.env.example`**: Template for `.env` (GCP_URL, PROJECT_ID, REGION, SERVICE_NAME)
 - **`pyproject.toml`**: Dependencies (Locust)
 
 ## Troubleshooting

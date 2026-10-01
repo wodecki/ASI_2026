@@ -50,6 +50,8 @@ uv run python "2. predict.py"
 # Install dependencies
 uv sync
 
+# First set PROJECT_ID in "0. fetch_data.py" (placeholder: your-gcp-project-id)
+
 # Download fresh data from BigQuery
 uv run python "0. fetch_data.py"
 
@@ -65,7 +67,7 @@ uv run python "2. predict.py"
 ### `0. fetch_data.py` - Download Training Data
 
 Downloads Iowa alcohol sales data from BigQuery:
-- **Dataset:** `asi2025.iowa.sales` (created in Module 1)
+- **Dataset:** `your-gcp-project-id.iowa.sales` (created in Module 1)
 - **Products:** 5 top-selling alcohol items
 - **Date range:** 2023-01-01 to 2024-05-30
 - **Output:** `data/iowa_sales.csv` (~1800 rows)

@@ -1,6 +1,6 @@
 {
-  "trained_at": "2025-10-30T08:39:44.947470",
-  "training_time_seconds": 47.28,
+  "trained_at": "2026-09-30T20:02:48.340798",
+  "training_time_seconds": 29.78,
   "data_summary": {
     "num_samples": 1998,
     "num_products": 5,
@@ -18,63 +18,35 @@
   },
   "model_performance": {
     "best_model": "WeightedEnsemble",
-    "num_models_trained": 8
+    "num_models_trained": 4
   },
   "leaderboard": [
     {
       "model": "WeightedEnsemble",
-      "score_val": -0.5586224210520256,
-      "pred_time_val": 1.281062126159668,
-      "fit_time_marginal": 0.0685739517211914,
-      "fit_order": 8
-    },
-    {
-      "model": "TemporalFusionTransformer",
-      "score_val": -0.560219500984507,
-      "pred_time_val": 0.0066149234771728516,
-      "fit_time_marginal": 13.150304079055786,
-      "fit_order": 7
-    },
-    {
-      "model": "DirectTabular",
-      "score_val": -0.7045327358370367,
-      "pred_time_val": 0.018656015396118164,
-      "fit_time_marginal": 0.8045802116394043,
+      "score_val": -0.8214208416935519,
+      "pred_time_val": 2.739871294578734,
+      "fit_time_marginal": 0.041044416999284294,
       "fit_order": 4
     },
     {
-      "model": "Chronos[bolt_small]",
-      "score_val": -0.7879713823797025,
-      "pred_time_val": 1.255791187286377,
-      "fit_time_marginal": 3.994035005569458,
-      "fit_order": 6
+      "model": "Toto2",
+      "score_val": -0.8652150714838239,
+      "pred_time_val": 0.018344879150390625,
+      "fit_time_marginal": 0.45984888076782227,
+      "fit_order": 3
+    },
+    {
+      "model": "Chronos2",
+      "score_val": -0.8801840331106734,
+      "pred_time_val": 0.7648999691009521,
+      "fit_time_marginal": 8.46443510055542,
+      "fit_order": 2
     },
     {
       "model": "SeasonalNaive",
       "score_val": -0.891550165249577,
-      "pred_time_val": 1.0191810131072998,
-      "fit_time_marginal": 0.005082845687866211,
-      "fit_order": 2
-    },
-    {
-      "model": "ETS",
-      "score_val": -0.9023727926713754,
-      "pred_time_val": 7.312614917755127,
-      "fit_time_marginal": 0.004371166229248047,
-      "fit_order": 5
-    },
-    {
-      "model": "RecursiveTabular",
-      "score_val": -0.9164158883375815,
-      "pred_time_val": 0.01958179473876953,
-      "fit_time_marginal": 5.921510219573975,
-      "fit_order": 3
-    },
-    {
-      "model": "Naive",
-      "score_val": -1.5704016362613098,
-      "pred_time_val": 1.2458441257476807,
-      "fit_time_marginal": 0.007503986358642578,
+      "pred_time_val": 1.9559292793273926,
+      "fit_time_marginal": 0.0074176788330078125,
       "fit_order": 1
     }
   ],

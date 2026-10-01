@@ -1,4 +1,4 @@
-# ASI_2025 - Machine Learning Operations Course
+# ASI_2026 - Machine Learning Operations Course
 
 An educational repository for teaching Machine Learning Operations (MLOps) and production ML engineering practices. This course covers the complete ML lifecycle from data processing through deployment and monitoring, with heavy emphasis on containerization, orchestration, and modern ML tooling.
 
@@ -10,9 +10,9 @@ The Playlist: https://www.youtube.com/playlist?list=PLOiItT5FLNRqN9DeGbnXpw2SMeh
 
 ## 📚 Course Overview
 
-**Repository:** https://github.com/wodecki/ASI_2025
+**Repository:** https://github.com/wodecki/ASI_2026
 
-**Python Version:** 3.10-3.11
+**Python Version:** 3.12
 
 **Package Manager:** `uv` (mandatory)
 
@@ -29,7 +29,7 @@ The Playlist: https://www.youtube.com/playlist?list=PLOiItT5FLNRqN9DeGbnXpw2SMeh
 ## 🗂️ Repository Structure
 
 ```
-ASI_2025/
+ASI_2026/
 ├── slides/                           # Course presentation materials
 │   ├── 0. Introduction/
 │   ├── 1. Set-up/
@@ -104,7 +104,7 @@ System design patterns, microservices architecture, and production ML systems.
 
 ### Prerequisites
 
-- Python 3.10 or 3.11
+- Python 3.12 (uv installs it automatically)
 - Docker Desktop (for containerization modules)
 - Google Cloud Platform account (for cloud modules)
 - Git
@@ -113,8 +113,8 @@ System design patterns, microservices architecture, and production ML systems.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/wodecki/ASI_2025.git
-   cd ASI_2025
+   git clone https://github.com/wodecki/ASI_2026.git
+   cd ASI_2026
    ```
 
 2. **Install uv package manager:**
@@ -145,7 +145,7 @@ System design patterns, microservices architecture, and production ML systems.
 
 **Course Instructor:** Andrzej Wodecki, wodecki@pjwstk.edu.pl
 
-**Repository Issues:** https://github.com/wodecki/ASI_2025/issues
+**Repository Issues:** https://github.com/wodecki/ASI_2026/issues
 
 
 ## 📄 License
@@ -154,5 +154,5 @@ This educational material is provided for learning purposes.
 
 ---
 
-**Last Updated:** October 2025
-**Course Year:** 2025
+**Last Updated:** September 2026
+**Course Year:** 2026

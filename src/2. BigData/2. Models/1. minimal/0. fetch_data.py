@@ -2,7 +2,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Hardcoded values (this is intentionally simple - NOT production-ready!)
-PROJECT_ID = "asi2025"
+PROJECT_ID = "your-gcp-project-id"  # <- replace with your GCP project ID
 QUERY = """
 SELECT
   date,

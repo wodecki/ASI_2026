@@ -11,8 +11,9 @@ cd backend
 uv sync
 uv run python "0. train.py"
 
-# Configure scripts (edit PROJECT_ID, REGION)
-nano build.sh deploy.sh
+# Configure settings (set PROJECT_ID etc. - the scripts read .env)
+cp .env.example .env
+nano .env
 
 # Build and push to Artifact Registry
 ./build.sh
@@ -24,10 +25,11 @@ nano build.sh deploy.sh
 ## What's Inside
 
 ```
-3-GCP-Run/
+4-GCP-Run/
 ├── README.md              # This file
 └── backend/
     ├── README.md          # Complete deployment guide
+    ├── .env.example       # Settings template (copy to .env)
     ├── build.sh           # Build & push to registry
     ├── deploy.sh          # Deploy to Cloud Run
     ├── Dockerfile         # Cloud Run optimized
@@ -74,8 +76,8 @@ See **[backend/README.md](backend/README.md)** for:
 After deployment:
 ```bash
 # Replace with your actual URL
-curl https://iowa-sales-api-abc123-uc.a.run.app/
-curl https://iowa-sales-api-abc123-uc.a.run.app/predict/BLACK%20VELVET
+curl https://iowa-backend-XXXXXXXXXX.europe-west4.run.app/
+curl https://iowa-backend-XXXXXXXXXX.europe-west4.run.app/predict/BLACK%20VELVET
 ```
 
 ## Resources

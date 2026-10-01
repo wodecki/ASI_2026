@@ -2,9 +2,9 @@
 name = "experiments-canary"
 version = "0.1.0"
 description = "Canary deployment demo: Serious vs Funny chatbot versions"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.12,<3.14"
 dependencies = [
-    "openai>=1.0.0",
-    "streamlit>=1.25.0",
-    "python-dotenv>=1.0.0",
+    "openai>=3.22",
+    "streamlit>=1.64",
+    "python-dotenv>=1.2",
 ]

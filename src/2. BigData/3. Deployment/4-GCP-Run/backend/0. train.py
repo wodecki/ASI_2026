@@ -34,11 +34,11 @@ predictor = TimeSeriesPredictor(
 
 predictor.fit(
     train_data,
-    presets=["medium_quality", "optimize_for_deployment"],
+    presets="medium_quality",
     time_limit=60,
     excluded_model_types=["RecursiveTabular", "DirectTabular"],
 )
 
-print(f"\n✓ Model trained and optimized for deployment")
+print(f"\n✓ Model trained")
 print(f"✓ Saved to: {predictor.path}")
-print(f"✓ Models included: {predictor.get_model_names()}")
+print(f"✓ Models included: {predictor.model_names()}")

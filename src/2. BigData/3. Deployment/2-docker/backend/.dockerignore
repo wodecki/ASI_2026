@@ -35,9 +35,8 @@ Thumbs.db
 Dockerfile
 .dockerignore
 
-# uv
+# uv (uv.lock is NOT ignored - the image installs exactly the locked versions)
 .uv/
-uv.lock
 
 # Logs
 *.log

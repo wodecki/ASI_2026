@@ -34,7 +34,7 @@ if st.button('Generate Forecast', type="primary"):
             df['mean'] = df['mean'].round(2)
             df = df[['date', 'mean']].rename(columns={'date': 'Date', 'mean': 'Predicted Sales'})
 
-            st.dataframe(df, use_container_width=True, hide_index=True)
+            st.dataframe(df, width="stretch", hide_index=True)
 
             st.line_chart(df.set_index('Date')['Predicted Sales'])
         else:

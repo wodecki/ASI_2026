@@ -1,16 +1,11 @@
 import logging
 import os
 import json
-import sys
 from google.cloud import bigquery
 import pandas as pd
 from datetime import datetime
 
-# Import tomllib (Python 3.11+) or tomli (Python < 3.11)
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
+import tomllib
 
 # Set up logging
 logging.basicConfig(
@@ -26,6 +21,8 @@ with open("config/config.toml", "rb") as f:
 
 # BigQuery setup
 PROJECT_ID = config['bigquery']['project_id']
+if PROJECT_ID == "your-gcp-project-id":
+    raise ValueError("Set bigquery.project_id in config/config.toml to your GCP project ID")
 DATASET = config['bigquery']['dataset']
 TABLE = config['bigquery']['table']
 DRY_RUN = config['bigquery'].get('dry_run', False)

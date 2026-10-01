@@ -2,13 +2,22 @@
 name = "iowa-backend"
 version = "0.1.0"
 description = "Iowa sales time series forecasting backend (Docker deployment)"
-requires-python = ">=3.11,<3.13"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
 dependencies = [
-    "autogluon-timeseries>=1.4.0",
-    "fastapi>=0.121.0",
-    "pandas>=2.3.3",
-    "uvicorn>=0.38.0",
-    # NOTE: torch is installed separately in Dockerfile (CPU-only version for smaller image)
-    # For local development, install with: uv add "torch>=2.2.0,<2.3.0"
-    "numpy>=1.24.0,<2.0.0",  # AutoGluon 1.4.0 requires NumPy 1.x (not compatible with 2.x yet)
+    "autogluon.timeseries>=1.6.3,<1.7",  # the saved model only loads with the same AutoGluon version
+    "torch>=2.10,<2.11",  # AutoGluon 1.6 supports torch 2.10 on all platforms (macOS: <2.11)
+    "pandas>=2.3,<2.4",  # AutoGluon 1.6 does not support pandas 3 yet
+    "fastapi>=0.142",
+    "uvicorn>=0.54",
 ]
+
+# On Linux (Docker images, GCP VMs) install CPU-only torch wheels (~200 MB instead of several GB of CUDA libraries).
+# On macOS the default PyPI wheels are used.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

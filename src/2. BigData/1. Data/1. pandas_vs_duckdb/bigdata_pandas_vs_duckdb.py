@@ -21,49 +21,39 @@ Educational Focus:
 - Data aggregation patterns
 
 Dataset Details:
-- Source: Google Cloud Storage gs://bigdata2024/temperatures/
-- Format: Semicolon-delimited (station_name;measurement)
+- Source: synthetic, generated locally by generate_data.py (station list in stations.csv)
+- Format: Semicolon-delimited (station_name;measurement), no header
 - Size: 100M records (~1.3 GB), 1B records (~13 GB)
 """
 
 import pandas as pd
 import duckdb
 import time
-import subprocess
 from pathlib import Path
 
+from generate_data import generate
+
 
 # =============================================================================
-# SECTION 1: Data Download
+# SECTION 1: Data Generation
 # =============================================================================
 
-def download_temperature_data():
-    """Download temperature datasets from Google Cloud Storage (only if not already present)"""
+def generate_temperature_data():
+    """Generate the synthetic temperature datasets locally (only if not already present).
 
-    medium_file = Path("medium_dataset.csv")
-    large_file = Path("large_dataset.csv")
+    The files are produced by generate_data.py with DuckDB - see that script for details.
+    """
 
-    # 100 million records: ~1.3 GB, ~40 seconds download time
-    if medium_file.exists():
-        print(f"✓ {medium_file.name} already exists, skipping download")
-    else:
-        print(f"Downloading {medium_file.name} (100M records, ~1.3 GB, ~40 seconds)...")
-        subprocess.run([
-            "wget",
-            "https://storage.googleapis.com/bigdata2025/pandas_vs_duckdb/medium_dataset.csv"
-        ])
-        print(f"✓ {medium_file.name} downloaded successfully")
+    datasets = [
+        (Path("medium_dataset.csv"), 100_000_000),   # 100M records: ~1.3 GB
+        (Path("large_dataset.csv"), 1_000_000_000),  # 1B records: ~13 GB
+    ]
 
-    # 1 billion records: ~13 GB, ~6 minutes download time
-    if large_file.exists():
-        print(f"✓ {large_file.name} already exists, skipping download")
-    else:
-        print(f"Downloading {large_file.name} (1B records, ~13 GB, ~6 minutes)...")
-        subprocess.run([
-            "wget",
-            "https://storage.googleapis.com/bigdata2025/pandas_vs_duckdb/large_dataset.csv"
-        ])
-        print(f"✓ {large_file.name} downloaded successfully")
+    for path, rows in datasets:
+        if path.exists():
+            print(f"✓ {path.name} already exists, skipping generation")
+        else:
+            generate(rows, path)
 
 
 # =============================================================================
@@ -287,8 +277,8 @@ def analyze_1b_with_duckdb():
 
 # Uncomment sections as needed:
 
-# Step 1: Download data (run once)
-download_temperature_data()
+# Step 1: Generate data (run once)
+generate_temperature_data()
 
 # Step 2: Analyze 100M records
 analyze_100m_with_pandas()

@@ -3,15 +3,10 @@ import pandas as pd
 import json
 import time
 import os
-import sys
 from datetime import datetime
 from autogluon.timeseries import TimeSeriesDataFrame, TimeSeriesPredictor
 
-# Import tomllib (Python 3.11+) or tomli (Python < 3.11)
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
+import tomllib
 
 # Set up logging
 logging.basicConfig(

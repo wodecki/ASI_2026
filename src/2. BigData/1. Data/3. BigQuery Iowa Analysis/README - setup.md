@@ -15,7 +15,7 @@ This guide walks you through setting up your local environment to run BigQuery P
 - Active Google Cloud Platform account
 - Iowa dataset imported to BigQuery (see `README - import.md`)
 - macOS, Linux, or Windows with WSL2
-- Python 3.10 or higher
+- Python 3.12 (installed automatically by uv)
 
 ---
 
@@ -111,7 +111,7 @@ gcloud init
    - Or select `[2] Log in with a new account`
 
 3. **"Pick cloud project to use"**
-   - Enter the number corresponding to your project (e.g., `asi2024-415408`)
+   - Enter the number corresponding to your project (e.g., `your-gcp-project-id`)
    - Or enter project ID manually
 
 4. **"Do you want to configure a default Compute Region?"**
@@ -127,7 +127,7 @@ gcloud config list
 # Expected output:
 # [core]
 # account = your-email@gmail.com
-# project = asi2024-415408
+# project = your-gcp-project-id
 #
 # [compute]
 # region = europe-west4
@@ -168,11 +168,11 @@ ls ~/.config/gcloud/application_default_credentials.json
 
 ```bash
 # Set your project as default
-gcloud config set project asi2024-415408
+gcloud config set project your-gcp-project-id
 
 # Verify
 gcloud config get-value project
-# Output: asi2024-415408
+# Output: your-gcp-project-id
 ```
 
 ---
@@ -237,19 +237,19 @@ uv sync
 ```
 
 **What Gets Installed:**
-- `google-cloud-bigquery>=3.25.0` - BigQuery Python client
-- `pandas>=2.2.0` - Data manipulation library
-- `db-dtypes>=1.2.0` - Database data type conversions for pandas
-- `pyarrow>=17.0.0` - Fast columnar data processing (required for BigQuery)
+- `google-cloud-bigquery>=3.45` - BigQuery Python client
+- `pandas>=2.3,<3` - Data manipulation library
+- `db-dtypes>=1.7` - Database data type conversions for pandas
+- `pyarrow>=25` - Fast columnar data processing (required for BigQuery)
 
 **Expected Output:**
 ```
 Resolved 12 packages in 1.2s
 Installed 12 packages in 450ms
- + google-cloud-bigquery==3.25.0
- + pandas==2.2.2
- + db-dtypes==1.2.1
- + pyarrow==17.0.0
+ + google-cloud-bigquery==3.45.2
+ + pandas==2.3.3
+ + db-dtypes==1.7.1
+ + pyarrow==25.0.1
  + ... (dependencies)
 ```
 
@@ -262,10 +262,10 @@ Installed 12 packages in 450ms
 uv pip list
 
 # Expected output includes:
-# google-cloud-bigquery  3.25.0
-# pandas                 2.2.2
-# db-dtypes              1.2.1
-# pyarrow                17.0.0
+# google-cloud-bigquery  3.45.2
+# pandas                 2.3.3
+# db-dtypes              1.7.1
+# pyarrow                25.0.1
 ```
 
 ---
@@ -276,37 +276,26 @@ uv pip list
 
 Open `1. read_from_GBQ.py` and update the project ID to match your GCP project:
 
-**Current code:**
+**Current code (top of the script):**
 ```python
-client = bigquery.Client(project="asi2025-850710718243")
+# Configuration - UPDATE WITH YOUR PROJECT ID
+PROJECT_ID = "your-gcp-project-id"  # <- replace with your GCP project ID
+DATASET = "iowa"
+TABLE = "training_data"
 ```
 
-**Updated code (replace with YOUR project ID):**
+**Updated code (replace the placeholder with YOUR project ID):**
 ```python
-import os
-from google.cloud import bigquery
-import pandas as pd
+PROJECT_ID = "my-project-123456"  # your GCP project ID (see `gcloud config get-value project`)
+```
 
-# Use environment variable or hardcode your project ID
-PROJECT_ID = os.getenv("GCP_PROJECT_ID", "asi2024-415408")  # Replace with your project ID
-
-# Initialize client
-client = bigquery.Client(project=PROJECT_ID)
-
-# Query data
-query = """
+The query already uses these variables, so you do not need to edit it:
+```python
+query = f"""
 SELECT date, item_name, total_amount_sold
-FROM `asi2024-415408.iowa.training_data`  -- Update this too!
+FROM `{PROJECT_ID}.{DATASET}.{TABLE}`
 ORDER BY item_name, date
 """
-
-# Execute query and load to pandas
-df = client.query(query).to_dataframe()
-
-print(df.head())
-
-# Save locally (uncomment to enable)
-# df.to_csv("data/iowa_sales.csv", index=False)
 ```
 
 ---
@@ -362,15 +351,15 @@ python "1. read_from_GBQ.py"
 
 ### Option 3: Run with Environment Variable
 
-Set project ID via environment variable:
+Set project ID via environment variable. Note: the script as shipped hardcodes `PROJECT_ID`; this option only works after you switch it to read `GCP_PROJECT_ID` (see "Use .env File for Configuration" below).
 
 ```bash
 # macOS/Linux
-export GCP_PROJECT_ID="asi2024-415408"
+export GCP_PROJECT_ID="your-gcp-project-id"
 uv run python "1. read_from_GBQ.py"
 
 # Windows PowerShell
-$env:GCP_PROJECT_ID="asi2024-415408"
+$env:GCP_PROJECT_ID="your-gcp-project-id"
 uv run python "1. read_from_GBQ.py"
 ```
 
@@ -402,7 +391,7 @@ ls ~/.config/gcloud/application_default_credentials.json
 **Error Message:**
 ```
 google.api_core.exceptions.Forbidden: 403 GET https://bigquery.googleapis.com/...
-Access Denied: Project asi2024-415408: User does not have permission
+Access Denied: Project your-gcp-project-id: User does not have permission
 ```
 
 **Solution:**
@@ -420,7 +409,7 @@ Access Denied: Project asi2024-415408: User does not have permission
 
 3. Grant yourself BigQuery permissions:
    ```bash
-   gcloud projects add-iam-policy-binding asi2024-415408 \
+   gcloud projects add-iam-policy-binding your-gcp-project-id \
      --member="user:your-email@gmail.com" \
      --role="roles/bigquery.user"
    ```
@@ -431,14 +420,14 @@ Access Denied: Project asi2024-415408: User does not have permission
 
 **Error Message:**
 ```
-google.api_core.exceptions.NotFound: 404 Not found: Table asi2024-415408:iowa.training_data
+google.api_core.exceptions.NotFound: 404 Not found: Table your-gcp-project-id:iowa.training_data
 ```
 
 **Solution:**
 
 1. Verify table exists in BigQuery Console:
    ```
-   BigQuery → asi2024-415408 → iowa → training_data
+   BigQuery → your-gcp-project-id → iowa → training_data
    ```
 
 2. If table doesn't exist, create it using SQL from `README.md` Part 3:
@@ -450,7 +439,7 @@ google.api_core.exceptions.NotFound: 404 Not found: Table asi2024-415408:iowa.tr
    ```python
    query = """
    SELECT date, item_name, total_amount_sold
-   FROM `asi2024-415408.iowa.training_data`  -- Check project ID and dataset name
+   FROM `your-gcp-project-id.iowa.training_data`  -- Check project ID and dataset name
    ORDER BY item_name, date
    """
    ```
@@ -528,7 +517,7 @@ from google.cloud import bigquery
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "service-account-key.json"
 
 # Initialize client
-client = bigquery.Client(project="asi2024-415408")
+client = bigquery.Client(project="your-gcp-project-id")
 ```
 
 **5. Add to .gitignore:**
@@ -544,7 +533,7 @@ Create `.env` file in project directory:
 
 ```bash
 # .env
-GCP_PROJECT_ID=asi2024-415408
+GCP_PROJECT_ID=your-gcp-project-id
 BIGQUERY_DATASET=iowa
 BIGQUERY_TABLE=training_data
 ```
@@ -593,7 +582,7 @@ Reduce costs by enabling BigQuery query caching:
 ```python
 from google.cloud import bigquery
 
-client = bigquery.Client(project="asi2024-415408")
+client = bigquery.Client(project="your-gcp-project-id")
 
 # Configure query job
 job_config = bigquery.QueryJobConfig()
@@ -602,7 +591,7 @@ job_config.use_legacy_sql = False  # Use standard SQL
 
 query = """
 SELECT date, item_name, total_amount_sold
-FROM `asi2024-415408.iowa.training_data`
+FROM `your-gcp-project-id.iowa.training_data`
 LIMIT 100
 """
 
@@ -624,11 +613,11 @@ print(f"Bytes processed: {query_job.total_bytes_processed:,}")
 ```python
 from google.cloud import bigquery
 
-client = bigquery.Client(project="asi2024-415408")
+client = bigquery.Client(project="your-gcp-project-id")
 
 query = """
 SELECT date, item_name, total_amount_sold
-FROM `asi2024-415408.iowa.training_data`
+FROM `your-gcp-project-id.iowa.training_data`
 ORDER BY item_name, date
 """
 
@@ -656,7 +645,7 @@ print(f"Estimated cost: ${estimated_cost:.6f}")
 ```python
 from google.cloud import bigquery
 
-client = bigquery.Client(project="asi2024-415408")
+client = bigquery.Client(project="your-gcp-project-id")
 
 # Set limits
 job_config = bigquery.QueryJobConfig(
@@ -664,7 +653,7 @@ job_config = bigquery.QueryJobConfig(
 )
 
 query = """
-SELECT * FROM `asi2024-415408.iowa.sales`  -- Full table scan
+SELECT * FROM `your-gcp-project-id.iowa.sales`  -- Full table scan
 """
 
 try:
@@ -700,7 +689,7 @@ brew install --cask google-cloud-sdk  # macOS
 gcloud auth application-default login
 
 # Set project
-gcloud config set project asi2024-415408
+gcloud config set project your-gcp-project-id
 
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -758,7 +747,7 @@ uv pip list | grep bigquery
 
 ---
 
-**Course:** ASI_2025 - Machine Learning Operations
+**Course:** ASI 2026 - Machine Learning Operations
 **Module:** 2. BigData / 1. Data Processing / 3. BigQuery Iowa Analysis
 **Difficulty:** Intermediate
 **Time Required:** 30-45 minutes

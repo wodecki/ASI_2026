@@ -8,7 +8,15 @@
 
 set -e
 
-REGION="europe-west4"
+# Configuration is read from .env next to this script (copy .env.example to .env and fill it in)
+cd "$(dirname "$0")"
+if [ ! -f .env ]; then
+    echo "ERROR: .env not found in $(pwd) - copy .env.example to .env and set the values" >&2
+    exit 1
+fi
+set -a; source .env; set +a
+: "${PROJECT_ID:?Set PROJECT_ID in .env}"
+: "${REGION:?Set REGION in .env}"
 
 echo "========================================="
 echo "Canary Deployment Demo"
@@ -20,8 +28,8 @@ echo "  - Funny: Hip-hop academic style"
 echo ""
 
 # Get URLs
-SERIOUS_URL=$(gcloud run services describe chatbot-serious --region ${REGION} --format 'value(status.url)')
-FUNNY_URL=$(gcloud run services describe chatbot-funny --region ${REGION} --format 'value(status.url)')
+SERIOUS_URL=$(gcloud run services describe chatbot-serious --project ${PROJECT_ID} --region ${REGION} --format 'value(status.url)')
+FUNNY_URL=$(gcloud run services describe chatbot-funny --project ${PROJECT_ID} --region ${REGION} --format 'value(status.url)')
 
 echo "Current deployments:"
 echo "  Serious: ${SERIOUS_URL}"

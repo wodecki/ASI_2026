@@ -47,29 +47,31 @@ This deployment uses **optimized Docker images** for minimal size and faster dep
 
 ### Optimization Strategies Applied
 
-| Optimization | Impact | Savings |
-|-------------|---------|---------|
-| **CPU-only PyTorch** | Removed CUDA dependencies | ~500MB |
-| **Multi-stage build** | Separates build and runtime | ~300MB |
-| **python:3.11-slim-buster** | Minimal base image | ~50MB |
-| **Single-layer cleanup** | Removes build artifacts | ~100MB |
-| **Deployment preset** | Optimizes model for inference | Faster loading |
-| **Aggressive .dockerignore** | Excludes unnecessary files | ~50MB |
+| Optimization | Impact |
+|-------------|---------|
+| **CPU-only PyTorch** | No CUDA libraries (the CUDA build of torch adds several GB) |
+| **Multi-stage build** | uv, its cache and build files stay in the builder stage |
+| **python:3.12-slim** | Minimal Debian base image |
+| **Aggressive .dockerignore** | Excludes unnecessary files from the build context |
 
-### Expected Results
+### Measured Image Sizes
 
-| Configuration | Backend Size | Frontend Size |
-|--------------|--------------|---------------|
-| **Before optimization** | ~2.5GB | ~500MB |
-| **After optimization** | ~1.0-1.5GB | ~300MB |
-| **Savings** | **~40-60%** | **~40%** |
+Measured in September 2026 (Docker Desktop, linux/arm64, `docker images`):
+
+| Image | Size | Notes |
+|-------|------|-------|
+| **Backend** | ~3.4 GB | Python environment ~2.3 GB: torch (CPU) ~0.6 GB, CatBoost ~0.27 GB, llvmlite, pyarrow, scipy, transformers |
+| **Frontend** | ~0.8 GB | Streamlit, pandas, pyarrow |
+
+AutoGluon 1.6 depends on more libraries than earlier versions (e.g. `transformers` for the
+foundation models), so the backend image is larger than in previous course editions.
 
 ### Key Features
 
-1. **CPU-only PyTorch**: Installed via `--index-url https://download.pytorch.org/whl/cpu`
+1. **CPU-only PyTorch**: On Linux, `pyproject.toml` points `torch` at the `https://download.pytorch.org/whl/cpu` index
 2. **Multi-stage build**: Builder stage (with `uv` and build tools) + minimal runtime stage
 3. **Built-in health checks**: Both containers include health checks for orchestration
-4. **Optimized model**: Training uses `optimize_for_deployment` preset
+4. **Reproducible installs**: The image copies `uv.lock` and runs `uv sync --locked`, so it runs exactly the library versions the model was trained with (AutoGluon refuses to load a model saved by a different AutoGluon version)
 
 ### Verify Image Sizes
 
@@ -77,12 +79,12 @@ This deployment uses **optimized Docker images** for minimal size and faster dep
 # Build images
 docker compose build
 
-# Check sizes
-docker images | grep iowa
+# Check sizes (compose names the images after the folder)
+docker images | grep 2-docker
 
-# Expected output:
-# iowa-backend    ~1.2GB (down from ~2.5GB)
-# iowa-frontend   ~300MB (down from ~500MB)
+# Expected output (approximately):
+# 2-docker-backend    3.4GB
+# 2-docker-frontend   0.8GB
 ```
 
 ### Compare with Previous Version
@@ -159,5 +161,5 @@ open http://localhost:8501
 ## Requirements
 
 - Docker Desktop
-- Python 3.11 (for training)
+- Python 3.12 (for training; installed automatically by uv)
 - `uv` package manager

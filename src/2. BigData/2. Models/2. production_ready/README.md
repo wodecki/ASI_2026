@@ -46,6 +46,9 @@ uv run python "2. predict.py"
 # Install dependencies
 uv sync
 
+# Set bigquery.project_id in config/config.toml first -
+# fetch_data.py raises a ValueError while it is still "your-gcp-project-id"
+
 # Download fresh data from BigQuery
 uv run python "0. fetch_data.py"
 
@@ -63,7 +66,7 @@ uv run python "2. predict.py"
 **Before (minimal):**
 ```python
 # Hardcoded in code - must edit script to change
-PROJECT_ID = "asi2025"
+PROJECT_ID = "your-gcp-project-id"
 prediction_length = 7
 time_limit = 60
 ```
@@ -93,7 +96,7 @@ print(f"Downloaded {len(df)} rows")
 
 **After (production_ready):**
 ```python
-logger.info("Fetching data from BigQuery project: asi2025")
+logger.info(f"Fetching data from BigQuery project: {PROJECT_ID}")
 logger.info(f"✓ Downloaded {len(df)} rows")
 logger.error("ERROR: Data file not found")
 ```
@@ -186,7 +189,7 @@ except Exception as e:
 
 ```toml
 [bigquery]
-project_id = "asi2025"           # Your GCP project
+project_id = "your-gcp-project-id"  # Your GCP project ID (required)
 dataset = "iowa"                 # BigQuery dataset
 table = "sales"                  # BigQuery table
 
@@ -196,7 +199,7 @@ products = ["BLACK VELVET", ...]      # Products to forecast
 
 [data.date_range]
 start = "2023-01-01"                  # Training data start
-end = "2024-05-30"                    # Training data end
+end = "2025-05-30"                    # Training data end
 
 [model]
 path = "autogluon-iowa-production"    # Model save location

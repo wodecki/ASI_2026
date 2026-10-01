@@ -16,7 +16,7 @@ By completing this module, you will:
 
 ## Prerequisites
 
-- Python 3.10+
+- Python 3.12 (installed automatically by uv)
 - Basic understanding of Python functions and decorators
 - Familiarity with pandas DataFrames
 

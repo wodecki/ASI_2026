@@ -2,7 +2,7 @@
 # This separates configuration from code - a production best practice
 
 [bigquery]
-project_id = "asi2025"
+project_id = "your-gcp-project-id"  # <- replace with your GCP project ID
 dataset = "iowa"
 table = "sales"
 

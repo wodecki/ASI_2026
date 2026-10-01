@@ -33,16 +33,17 @@ brew install --cask google-cloud-sdk
 # Login
 gcloud auth login
 
-# Set project
-gcloud config set project asi2025
+# Set project (replace with your project ID)
+gcloud config set project your-gcp-project-id
 
 # Enable APIs
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com
 
 # Create Artifact Registry repository (REQUIRED - build.sh will fail without this)
-gcloud artifacts repositories create iowa-sales \
+# Name and location must match REPOSITORY and REGION in .env
+gcloud artifacts repositories create iowa \
   --repository-format=docker \
-  --location=us-central1 \
+  --location=europe-west4 \
   --description="Iowa sales containers"
 
 # Verify repository was created
@@ -61,17 +62,23 @@ This creates `autogluon-iowa-daily/` directory needed for deployment.
 
 ## Deployment Steps
 
-### 1. Configure Scripts
+### 1. Configure `.env`
 
-Edit `build.sh` and `deploy.sh` with your values:
+`build.sh` and `deploy.sh` read their settings from a `.env` file in `backend/` (next to the scripts) - you do not edit the scripts. Create it from the template and fill it in:
 ```bash
-PROJECT_ID="asi2025"           # Your GCP project
-REGION="europe-west4"           # Deployment region
-REPOSITORY="iowa-sales"        # Registry repo name
-IMAGE_NAME="iowa-backend"
-IMAGE_TAG="v1"
-SERVICE_NAME="iowa-sales-api"
+cp .env.example .env
 ```
+
+```bash
+# .env
+PROJECT_ID=your-gcp-project-id   # Your GCP project ID (see: gcloud projects list)
+REGION=europe-west4              # Deployment region
+REPOSITORY=iowa                  # Artifact Registry repository name
+IMAGE_TAG=v1
+SERVICE_NAME=iowa-backend        # Cloud Run service name
+```
+
+Both scripts stop with an error if `.env` is missing or any of these values is empty. The image name is fixed to `iowa-backend`, so the image URL is `${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/iowa-backend:${IMAGE_TAG}`, e.g. `europe-west4-docker.pkg.dev/your-gcp-project-id/iowa/iowa-backend:v1`.
 
 ### 2. Build and Push Image
 
@@ -97,22 +104,27 @@ This script deploys the image to Cloud Run with:
 - `--allow-unauthenticated` - Public access (no auth)
 - `--max-instances 10` - Cost control
 
-You'll get a URL like:
+Get the service URL (the command is also printed at the end of `deploy.sh`):
+```bash
+gcloud run services describe iowa-backend --project your-gcp-project-id --region europe-west4 --format 'value(status.url)'
 ```
-https://iowa-sales-api-abc123-uc.a.run.app
+
+It looks like:
+```
+https://iowa-backend-XXXXXXXXXX.europe-west4.run.app
 ```
 
 ### 4. Test
 
 ```bash
 # Health check
-curl https://iowa-sales-api-abc123-uc.a.run.app/
+curl https://iowa-backend-XXXXXXXXXX.europe-west4.run.app/
 
 # Prediction
-curl https://iowa-sales-api-abc123-uc.a.run.app/predict/BLACK%20VELVET
+curl https://iowa-backend-XXXXXXXXXX.europe-west4.run.app/predict/BLACK%20VELVET
 
 # Interactive docs
-open https://iowa-sales-api-abc123-uc.a.run.app/docs
+open https://iowa-backend-XXXXXXXXXX.europe-west4.run.app/docs
 ```
 
 ## Cost Estimate
@@ -131,10 +143,10 @@ open https://iowa-sales-api-abc123-uc.a.run.app/docs
 
 **build.sh fails with "Repository not found":**
 ```bash
-# Create the repository first
-gcloud artifacts repositories create iowa-sales \
+# Create the repository first (must match REPOSITORY and REGION in .env)
+gcloud artifacts repositories create iowa \
   --repository-format=docker \
-  --location=us-central1 \
+  --location=europe-west4 \
   --description="Iowa sales containers"
 
 # Verify it exists
@@ -143,7 +155,7 @@ gcloud artifacts repositories list
 
 **Container fails to start:**
 ```bash
-gcloud run services logs read iowa-sales-api --region us-central1 --limit 20
+gcloud run services logs read iowa-backend --project your-gcp-project-id --region europe-west4 --limit 20
 ```
 
 Common issues:
@@ -153,7 +165,7 @@ Common issues:
 
 **Update deployment:**
 ```bash
-# Change IMAGE_TAG to v2 in build.sh and deploy.sh, then:
+# Change IMAGE_TAG to v2 in .env, then:
 ./build.sh
 ./deploy.sh
 ```
@@ -162,11 +174,11 @@ Common issues:
 
 ```bash
 # Delete service
-gcloud run services delete iowa-sales-api --region us-central1
+gcloud run services delete iowa-backend --project your-gcp-project-id --region europe-west4
 
 # Delete image
 gcloud artifacts docker images delete \
-  us-central1-docker.pkg.dev/asi2025/iowa-sales/iowa-backend:v1
+  europe-west4-docker.pkg.dev/your-gcp-project-id/iowa/iowa-backend:v1
 ```
 
 ## Key Differences from Docker

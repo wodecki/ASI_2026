@@ -176,19 +176,17 @@ df -h | grep /mnt/data
 
 ## Step 3: Install System Dependencies
 
-### Update system and install Python 3.11
+### Update system and install build tools
 
 ```bash
 # Update package list
 sudo apt update
 
-# Install Python 3.11 and essentials
-sudo apt install -y python3.11 python3.11-venv python3.11-dev \
-  build-essential git curl
-
-# Verify Python version
-python3.11 --version  # Should show 3.11.x
+# Install git, curl and build tools
+sudo apt install -y build-essential git curl
 ```
+
+**No need to install Python yourself:** the project pins Python 3.12 in `.python-version`, and `uv sync` downloads and installs Python 3.12 automatically.
 
 ### Install uv (package manager)
 
@@ -238,10 +236,10 @@ uv --version
 cd /mnt/data
 
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/ASI_2025.git
+git clone https://github.com/wodecki/ASI_2026.git
 
 # Navigate to backend directory
-cd ASI_2025/src/2.\ BigData/3.\ Deployment/1-local/backend
+cd ASI_2026/src/2.\ BigData/3.\ Deployment/1-local/backend
 ```
 
 ---
@@ -251,7 +249,7 @@ cd ASI_2025/src/2.\ BigData/3.\ Deployment/1-local/backend
 ### Install dependencies
 
 ```bash
-# Initialize uv environment (uses Python 3.11)
+# Initialize uv environment (installs Python 3.12 automatically, per .python-version)
 uv sync
 ```
 
@@ -308,7 +306,7 @@ gcloud compute instances describe asi-micro \
 
 ```bash
 # Navigate to backend directory
-cd /mnt/data/ASI_2025/src/2.\ BigData/3.\ Deployment/1-local/backend
+cd /mnt/data/ASI_2026/src/2.\ BigData/3.\ Deployment/1-local/backend
 
 # Start server
 uv run uvicorn main:app --host 0.0.0.0 --port 8003
@@ -363,7 +361,7 @@ sudo apt install -y screen
 screen -S iowa-api
 
 # Start server
-cd /mnt/data/ASI_2025/src/2.\ BigData/3.\ Deployment/1-local/backend
+cd /mnt/data/ASI_2026/src/2.\ BigData/3.\ Deployment/1-local/backend
 uv run uvicorn main:app --host 0.0.0.0 --port 8003
 
 # Detach from screen: Ctrl+A, then D
@@ -389,7 +387,7 @@ After=network.target
 [Service]
 Type=simple
 User=YOUR_USERNAME
-WorkingDirectory=/mnt/data/ASI_2025/src/2. BigData/3. Deployment/1-local/backend
+WorkingDirectory=/mnt/data/ASI_2026/src/2. BigData/3. Deployment/1-local/backend
 Environment="PATH=/home/YOUR_USERNAME/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
 ExecStart=/home/YOUR_USERNAME/.cargo/bin/uv run uvicorn main:app --host 0.0.0.0 --port 8003
 Restart=always
@@ -483,14 +481,12 @@ lsblk -o NAME,SIZE,TYPE,MOUNTPOINTS
 ### Python version mismatch
 
 ```bash
-# Check Python version
-python3.11 --version
+# Check which Python the project environment uses (should be 3.12.x)
+uv run python --version
 
-# If not 3.11, install it
-sudo apt install -y python3.11 python3.11-venv python3.11-dev
-
-# Force uv to use Python 3.11
-uv sync --python python3.11
+# Let uv install Python 3.12 and rebuild the environment with it
+uv python install 3.12
+uv sync --python 3.12
 ```
 
 ---
@@ -689,7 +685,7 @@ df -h | grep /mnt/data
 
 # Check your files are there
 ls -la /mnt/data
-# You should see: ASI_2025/ directory with all your code!
+# You should see: ASI_2026/ directory with all your code!
 ```
 
 ### Auto-mount on reboot
@@ -712,15 +708,14 @@ sudo mount -a
 
 ## Step 5: Install Dependencies on asi-macro
 
-Even though your code is on the disk, the NEW VM needs Python and uv installed.
+Even though your code is on the disk, the NEW VM needs uv installed (uv then installs Python 3.12 automatically on `uv sync`).
 
 ```bash
 # Update system
 sudo apt update
 
-# Install Python 3.11
-sudo apt install -y python3.11 python3.11-venv python3.11-dev \
-  build-essential git curl
+# Install git, curl and build tools (uv installs Python 3.12 itself)
+sudo apt install -y build-essential git curl
 
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -730,7 +725,6 @@ source $HOME/.local/bin/env
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
 # Verify
-python3.11 --version
 uv --version
 ```
 
@@ -740,7 +734,7 @@ uv --version
 
 ```bash
 # Navigate to backend directory
-cd /mnt/data/ASI_2025/src/2.\ BigData/3.\ Deployment/1-local/backend
+cd /mnt/data/ASI_2026/src/2.\ BigData/3.\ Deployment/1-local/backend
 
 # Verify model exists (NO RE-TRAINING NEEDED!)
 ls -la autogluon-iowa-daily/

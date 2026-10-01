@@ -21,26 +21,37 @@ This module demonstrates the performance differences between **pandas** and **Du
 
 ### Temperature Data Files
 
-| File | Records | Size | Download Time | Source |
-|------|---------|------|---------------|--------|
-| `temperatures_100M.txt` | 100 million | ~1.3 GB | ~40 seconds | Google Cloud Storage |
-| `temperatures_1B.txt` | 1 billion | ~13 GB | ~6 minutes | Google Cloud Storage |
+| File | Records | Size |
+|------|---------|------|
+| `medium_dataset.csv` | 100 million | ~1.3 GB |
+| `large_dataset.csv` | 1 billion | ~13 GB |
 
-**Format:** Semicolon-delimited CSV
+**Format:** Semicolon-delimited CSV, no header (`station_name;measurement`)
 ```
-station_name;measurement
-Hamburg;23.5
-Berlin;18.2
-Munich;25.1
+London;23.1
+Tokyo;15.6
+Wrocław;-2.6
 ```
 
-**Data Source:** `gs://bigdata2024/temperatures/`
+**Data Source:** synthetic, generated locally by `generate_data.py` (the files are too large to keep in git).
+Each measurement is drawn from a normal distribution (sd = 10 °C) around the station's mean temperature
+listed in `stations.csv` (49 stations), in the style of the *One Billion Row Challenge*.
+The same row count always produces the same data, so everyone gets identical results.
+
+```bash
+uv run python generate_data.py --rows 100000000 --output medium_dataset.csv
+uv run python generate_data.py --rows 1000000000 --output large_dataset.csv
+```
+
+`bigdata_pandas_vs_duckdb.py` runs these automatically for any file that is missing.
 
 ## Files in This Module
 
 ```
 1. pandas_vs_duckdb/
 ├── bigdata_pandas_vs_duckdb.py    # Main Python script for analysis
+├── generate_data.py               # Generates the synthetic datasets with DuckDB
+├── stations.csv                   # Station names and mean temperatures used by the generator
 ├── pyproject.toml                 # uv dependency configuration
 ├── uv.lock                        # Locked dependency versions
 ├── medium_dataset.csv             # 100M records dataset (~1.3 GB)
@@ -97,8 +108,8 @@ uv add pandas duckdb pyarrow
 2. Open `bigdata_pandas_vs_duckdb.py` and uncomment desired sections at the bottom:
 
    ```python
-   # Step 1: Download data (run once)
-   download_temperature_data()
+   # Step 1: Generate data (run once)
+   generate_temperature_data()
 
    # Step 2: Analyze 100M records
    analyze_100m_with_pandas()
@@ -120,21 +131,24 @@ uv add pandas duckdb pyarrow
 
 ## Expected Performance Results
 
+Measured in September 2026 on a laptop with 8 CPU cores and 16 GB RAM (pandas 2.3.3, DuckDB 1.5.6).
+Your numbers will differ - the ratio is what matters.
+
 ### 100M Records (~1.3 GB)
 
 | Library | Time | Memory Peak | Notes |
 |---------|------|-------------|-------|
-| **pandas** | 60-120 sec | 8-12 GB | Single-threaded CSV reading |
-| **DuckDB** | 10-30 sec | 2-4 GB | Parallel processing, columnar storage |
+| **pandas** | ~12 sec | ~4.2 GB | Loads the whole file into memory, single-threaded aggregation |
+| **DuckDB** | ~1.6 sec | ~0.26 GB | Parallel, streaming CSV scan |
 
-**Speedup:** DuckDB is typically **3-5x faster** with **60-70% less memory**
+**Speedup:** DuckDB is about **7x faster** and uses about **15x less memory**
 
 ### 1B Records (~13 GB)
 
 | Library | Time | Memory Peak | Notes |
 |---------|------|-------------|-------|
-| **pandas** | 10+ min (or crash) | 50+ GB | Not recommended |
-| **DuckDB** | 60-180 sec | 8-15 GB | Handles data larger than RAM |
+| **pandas** | minutes, or out-of-memory | > RAM on a 16 GB machine | Not recommended |
+| **DuckDB** | ~22 sec | a few GB | Handles data larger than RAM |
 
 **Recommendation:** **Only use DuckDB** for billion-record datasets
 
@@ -177,7 +191,7 @@ uv add pandas duckdb pyarrow
 
 ### Exercise 1: Baseline Performance (Easy)
 
-1. Download `temperatures_100M.txt`
+1. Generate `medium_dataset.csv`
 2. Process with both pandas and DuckDB
 3. Record execution times and peak memory
 4. **Question:** What is the speedup ratio?
@@ -197,7 +211,7 @@ Modify the DuckDB query to:
 
 ### Exercise 4: Scalability Analysis (Advanced)
 
-1. Download `temperatures_1B.txt`
+1. Generate `large_dataset.csv`
 2. Process with DuckDB only
 3. Compare execution time to the 100M dataset
 4. **Question:** Is the processing time linear with data size? Why or why not?
@@ -233,16 +247,13 @@ uv run python bigdata_pandas_vs_duckdb.py
 ### Issue: "File not found"
 
 **Solution:**
-- Ensure you're in the correct directory: `src/2. BigData/tmp/1. Data/demo/`
-- Re-run the download commands
-- Check your internet connection
+- Ensure you're in the module directory: `src/2. BigData/1. Data/1. pandas_vs_duckdb/`
+- Re-run the generation step (`generate_data.py`)
 
-### Issue: Slow download speeds
+### Issue: Not enough disk space
 
 **Solution:**
-- Google Cloud Storage is optimized for speed, but network conditions vary
-- Use `wget -c` to resume interrupted downloads
-- Consider downloading during off-peak hours
+- The 1B-record file needs ~13 GB; generate only `medium_dataset.csv` and skip Step 3
 
 ### Issue: DuckDB query returns no results
 
@@ -340,7 +351,7 @@ After completing this module, proceed to:
 
 ---
 
-**Course:** ASI_2025 - Machine Learning Operations
+**Course:** ASI 2026 - Machine Learning Operations
 **Module:** 2. BigData / 1. Data Processing
 **Difficulty:** Intermediate
 **Time Required:** 2-3 hours

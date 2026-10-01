@@ -2,7 +2,7 @@
 name = "iowa-performance-test"
 version = "0.1.0"
 description = "Load testing for Iowa sales API on GCP Cloud Run"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.12,<3.14"
 dependencies = [
-    "locust>=2.31.8",
+    "locust>=2.46",
 ]
