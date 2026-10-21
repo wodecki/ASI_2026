@@ -1,7 +1,7 @@
 # GCP VM Setup Guide - ASI 2025 Course
 
 ## Overview
-This guide walks you through creating and connecting to a Google Cloud Platform (GCP) Virtual Machine for the ASI 2026 course. You will learn three different methods to access your VM: browser-based SSH, command-line interface (CLI), and Visual Studio Code.
+This guide walks you through creating and connecting to a Google Cloud Platform (GCP) Virtual Machine for the ASI 2026 course. You will learn four different methods to access your VM: browser-based SSH, the gcloud command-line interface (CLI), plain SSH from your terminal (without gcloud), and Visual Studio Code.
 
 **Prerequisites:**
 - A Google Cloud Platform account with billing enabled
@@ -130,18 +130,11 @@ gcloud compute instances list
 
 ---
 
-## Part 4: Connection Method 3 - Visual Studio Code (Best for Development)
+## Part 4: Connection Method 3 - SSH from Your Terminal (without gcloud)
 
-This method integrates your VM directly into VS Code, allowing you to edit files, run code, and debug as if working locally.
+This method uses your own SSH key and the standard `ssh` client (Terminal on Mac/Linux, PowerShell on Windows). Once the key is on the VM, you don't need gcloud at all. The VS Code method (Part 5) uses the same key.
 
-### Step 1: Install VS Code Extension
-
-1. Open Visual Studio Code
-2. Go to Extensions (Cmd+Shift+X on Mac, Ctrl+Shift+X on Windows)
-3. Search for **Remote - SSH**
-4. Install the extension by Microsoft
-
-### Step 2: Generate SSH Key Pair
+### Step 1: Generate SSH Key Pair
 
 On Your local computer (e.g. MacBook) open your terminal and run:
 
@@ -159,7 +152,7 @@ When prompted:
 - `~/.ssh/asi-micro` (private key)
 - `~/.ssh/asi-micro.pub` (public key)
 
-### Step 3: Copy Your Public Key
+### Step 2: Copy Your Public Key
 
 Display your public key:
 
@@ -172,19 +165,69 @@ cat ~/.ssh/asi-micro.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC... your_username
 ```
 
-### Step 4: Add SSH Key to Your GCP VM
+### Step 3: Add SSH Key to Your GCP VM
 
-1. In GCP Console, navigate to **Compute Engine > VM Instances**
-2. Click on your `asi-micro` instance name
-3. Click **Edit** at the top
-4. Scroll down to **SSH Keys**
-5. Click **Add Item**
-6. Paste your public key (from Step 3)
-7. Click **Save** at the bottom
+1. Close any open **SSH-in-browser** windows for this VM (they change the VM's SSH keys in the background, see Troubleshooting)
+2. In GCP Console, navigate to **Compute Engine > VM Instances**
+3. Click on your `asi-micro` instance name
+4. Click **Edit** at the top
+5. Scroll down to **SSH Keys**
+6. Click **Add Item**
+7. Paste your public key (from Step 2)
+8. Click **Save** at the bottom
 
-**Important:** Extract your username from the SSH key. The format is typically the last part of the key (e.g., `wodecki` from `andrzej_wodecki`). You'll need this for the next step.
+**Verification:** On the VM details page, your key is listed under **SSH Keys**.
 
-### Step 5: Configure VS Code SSH Connection
+**Important:** Your username on the VM is the last part of the key, the comment you set with `-C` (e.g., `andrzej_wodecki`). You'll need it in the next steps.
+
+### Step 4: Find the VM's External IP
+
+In GCP Console, go to **Compute Engine > VM Instances** and note the **External IP** of `asi-micro` (e.g., `34.141.222.22`).
+
+### Step 5: Connect via SSH
+
+```bash
+ssh -i ~/.ssh/asi-micro your_username@34.141.222.22
+```
+
+**Replace:**
+- `your_username` with your username (from the SSH key)
+- `34.141.222.22` with your VM's actual external IP
+
+On the first connection, `ssh` asks whether you trust the host. Type `yes`.
+
+**Verification:** You should see a terminal prompt like `your_username@asi-micro:~$`
+
+### Step 6 (Optional): Add a Shortcut in `~/.ssh/config`
+
+Add this entry to `~/.ssh/config` (create the file if it doesn't exist):
+
+```
+Host GCP-asi-micro
+    HostName 34.141.222.22
+    User your_username
+    IdentityFile ~/.ssh/asi-micro
+```
+
+Now `ssh GCP-asi-micro` is enough. VS Code (Part 5) uses the same entry.
+
+---
+
+## Part 5: Connection Method 4 - Visual Studio Code (Best for Development)
+
+This method integrates your VM directly into VS Code, allowing you to edit files, run code, and debug as if working locally. It needs the SSH key from Part 4, Steps 1–3.
+
+### Step 1: Install VS Code Extension
+
+1. Open Visual Studio Code
+2. Go to Extensions (Cmd+Shift+X on Mac, Ctrl+Shift+X on Windows)
+3. Search for **Remote - SSH**
+4. Install the extension by Microsoft
+
+### Step 2: Configure VS Code SSH Connection
+
+If you already added the `GCP-asi-micro` entry in Part 4, Step 6, skip to Step 3.
+
 
 1. Get your VM's external IP address:
    ```bash
@@ -210,7 +253,7 @@ Host GCP-asi-micro
 
 6. Save the file (Cmd+S / Ctrl+S)
 
-### Step 6: Connect from VS Code
+### Step 3: Connect from VS Code
 
 1. Press **Cmd+Shift+P** (Mac) or **Ctrl+Shift+P** (Windows)
 2. Type and select: **Remote-SSH: Connect to Host**
@@ -233,6 +276,14 @@ Host GCP-asi-micro
 - Verify your SSH key is correctly added to the VM in GCP Console
 - Check that the username in your SSH config matches the one in your public key
 - Ensure the private key file has correct permissions: `chmod 600 ~/.ssh/asi-micro`
+
+### Issue: "Supplied fingerprint does not match current metadata fingerprint" when saving the SSH key
+
+**Cause:** The VM's SSH keys changed while your Edit page was open. The browser **SSH** button adds temporary keys to the VM each time you use it.
+
+**Solution:**
+- Close SSH-in-browser windows for this VM
+- Reload the VM details page, click **Edit** again, paste your key and **Save**
 
 ### Issue: VS Code connection times out
 
@@ -271,6 +322,9 @@ gcloud compute instances stop asi-micro --zone=europe-west4-a
 
 # SSH into VM
 gcloud compute ssh asi-micro --zone=europe-west4-a --project=your-gcp-project-id
+
+# SSH into VM without gcloud
+ssh -i ~/.ssh/asi-micro your_username@EXTERNAL_IP
 
 # Check gcloud configuration
 gcloud config list
