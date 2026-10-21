@@ -76,7 +76,7 @@ gcloud init
 
 You will be prompted to:
 - Log in to your Google account
-- Select the `ASI_2026` project
+- Select the `ASI-2026` project
 - Set a default compute zone (choose `europe-west4-a`)
 
 ```bash
