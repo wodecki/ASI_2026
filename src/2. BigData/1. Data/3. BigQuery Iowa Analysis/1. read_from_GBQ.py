@@ -3,7 +3,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Configuration - UPDATE WITH YOUR PROJECT ID
-PROJECT_ID = "your-gcp-project-id"  # <- replace with your GCP project ID
+PROJECT_ID = "asi-2026-512306"  # <- replace with your GCP project ID
 DATASET = "iowa"
 TABLE = "training_data"
 
