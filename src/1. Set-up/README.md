@@ -1,4 +1,4 @@
-# GCP VM Setup Guide - ASI 2025 Course
+# GCP VM Setup Guide - ASI 2026 Course
 
 ## Overview
 This guide walks you through creating and connecting to a Google Cloud Platform (GCP) Virtual Machine for the ASI 2026 course. You will learn four different methods to access your VM: browser-based SSH, the gcloud command-line interface (CLI), plain SSH from your terminal (without gcloud), and Visual Studio Code.
