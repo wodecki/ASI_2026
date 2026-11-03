@@ -70,24 +70,23 @@ Downloads Iowa alcohol sales data from BigQuery:
 - **Dataset:** `your-gcp-project-id.iowa.sales` (created in Module 1)
 - **Products:** 5 top-selling alcohol items
 - **Date range:** 2023-01-01 to 2024-05-30
-- **Output:** `data/iowa_sales.csv` (~1800 rows)
+- **Output:** `data/iowa_sales.csv` (~2000 rows)
 
 ### `1. train.py` - Train Forecasting Model
 
 1. Loads Iowa sales data (5 products, daily sales)
 2. Splits data: last 7 days for testing, rest for training
-3. Trains multiple time series models with AutoGluon:
-   - Naive baseline
-   - SeasonalNaive
+3. Trains multiple time series models with AutoGluon (`medium_quality` preset, tabular models excluded):
+   - SeasonalNaive (baseline)
    - ETS (Exponential Smoothing)
-   - Theta method
-   - RecursiveTabular (ML-based)
-   - DirectTabular (ML-based)
+   - Theta method (may be skipped when the time budget runs out)
+   - Chronos2 (pretrained foundation model, weights downloaded from Hugging Face on first run)
+   - Toto2 (pretrained foundation model, weights downloaded from Hugging Face on first run)
    - WeightedEnsemble (combines all models)
 4. Saves trained model to `autogluon-iowa-daily/`
 5. Plots predictions vs actual values
 
-**Training time:** ~60 seconds on modern laptop
+**Training time:** capped at 60 seconds (`time_limit=60`); ~10-20 seconds on a modern laptop
 
 ### `2. predict.py` - Make Future Predictions
 
@@ -98,19 +97,19 @@ Downloads Iowa alcohol sales data from BigQuery:
 
 ## 📈 Understanding the Output
 
-When you run `1. train.py`, AutoGluon will show:
+When you run `1. train.py`, AutoGluon will show (numbers vary slightly between runs):
 
 ```
-Fitting timeseries model...
-Model trained in 60.23s
+Training complete. Models trained: ['SeasonalNaive', 'ETS', 'Chronos2', 'Toto2', 'WeightedEnsemble']
+Total runtime: 9.36 s
 Best model: WeightedEnsemble
-MASE score: -0.2367 (lower is better)
+Best model score: -0.8212
 ```
 
 **MASE (Mean Absolute Scaled Error):**
-- Measures forecast accuracy
-- MASE < 1.0 = Better than naive baseline
-- MASE = -0.24 means the model is excellent!
+- Measures forecast accuracy: the forecast error divided by the error of a seasonal naive forecast
+- MASE < 1.0 = Better than the naive baseline
+- AutoGluon always reports scores so that **higher is better**, so it prints MASE with a minus sign: `-0.8212` means MASE = 0.82, i.e. about 18% better than the naive baseline
 
 ## ⚠️ Limitations of This Approach
 

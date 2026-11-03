@@ -13,6 +13,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)  # hide per-request logs from Hugging Face model downloads
 
 # Load configuration
 logger.info("Loading configuration from config/config.toml")
@@ -82,7 +83,7 @@ train_data = TimeSeriesDataFrame.from_data_frame(
 # Make predictions
 logger.info("Generating predictions...")
 predictions = predictor.predict(train_data)
-logger.info(f"✓ Predictions generated for {predictions.index.nunique()} products")
+logger.info(f"✓ Predictions generated for {predictions.num_items} products")
 
 # Example: Get specific prediction for BLACK VELVET
 logger.info("\nExample Prediction (BLACK VELVET):")
@@ -111,7 +112,7 @@ logger.info("-" * 60)
 # Display all products
 logger.info("\nPredictions Summary (all products):")
 logger.info("-" * 60)
-for product in predictions.index.unique():
+for product in predictions.item_ids:
     product_preds = predictions.loc[product]
     # Handle both single and multiple prediction cases
     if isinstance(product_preds, pd.Series):

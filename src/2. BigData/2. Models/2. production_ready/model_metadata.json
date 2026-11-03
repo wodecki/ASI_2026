@@ -1,6 +1,6 @@
 {
-  "trained_at": "2026-09-30T20:01:17.086619",
-  "training_time_seconds": 26.93,
+  "trained_at": "2026-10-28T16:09:09.257879",
+  "training_time_seconds": 9.31,
   "data_summary": {
     "num_samples": 3570,
     "num_products": 5,
@@ -18,36 +18,43 @@
   },
   "model_performance": {
     "best_model": "WeightedEnsemble",
-    "num_models_trained": 4
+    "num_models_trained": 5
   },
   "leaderboard": [
     {
       "model": "WeightedEnsemble",
       "score_val": -0.6328526536502667,
-      "pred_time_val": 2.012693363991275,
-      "fit_time_marginal": 0.03500691699991876,
-      "fit_order": 4
+      "pred_time_val": 1.4372883816249669,
+      "fit_time_marginal": 0.04398258309811354,
+      "fit_order": 5
     },
     {
       "model": "Chronos2",
       "score_val": -0.6351554785281099,
-      "pred_time_val": 0.751960039138794,
-      "fit_time_marginal": 7.272700786590576,
+      "pred_time_val": 0.18643903732299805,
+      "fit_time_marginal": 2.9710958003997803,
+      "fit_order": 3
+    },
+    {
+      "model": "ETS",
+      "score_val": -0.690777743315849,
+      "pred_time_val": 2.1536829471588135,
+      "fit_time_marginal": 0.007070302963256836,
       "fit_order": 2
     },
     {
       "model": "SeasonalNaive",
       "score_val": -0.7296943486107771,
-      "pred_time_val": 1.2602770328521729,
-      "fit_time_marginal": 0.005975008010864258,
+      "pred_time_val": 1.2504689693450928,
+      "fit_time_marginal": 0.007805824279785156,
       "fit_order": 1
     },
     {
       "model": "Toto2",
       "score_val": -0.7346017543311488,
-      "pred_time_val": 0.015051126480102539,
-      "fit_time_marginal": 0.42073488235473633,
-      "fit_order": 3
+      "pred_time_val": 0.018526077270507812,
+      "fit_time_marginal": 0.45912981033325195,
+      "fit_order": 4
     }
   ]
 }

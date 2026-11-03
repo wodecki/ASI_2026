@@ -13,6 +13,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)  # hide per-request logs from Hugging Face model downloads
 
 # Load configuration
 logger.info("Loading configuration from config/config.toml")
@@ -83,7 +84,7 @@ train_data = TimeSeriesDataFrame.from_data_frame(
 # Make predictions (batch for all products)
 logger.info("Generating predictions for all products...")
 predictions = predictor.predict(train_data)
-logger.info(f"✓ Predictions generated for {predictions.index.nunique()} products")
+logger.info(f"✓ Predictions generated for {predictions.num_items} products")
 
 # Example: Get specific prediction for BLACK VELVET
 logger.info("\nExample Prediction (BLACK VELVET):")
@@ -112,7 +113,7 @@ logger.info("-" * 60)
 # Display all products
 logger.info("\nPredictions Summary (all products):")
 logger.info("-" * 60)
-for product in predictions.index.unique():
+for product in predictions.item_ids:
     product_preds = predictions.loc[product]
     # Handle both single and multiple prediction cases
     if isinstance(product_preds, pd.Series):
@@ -129,7 +130,7 @@ def export_predictions_to_json(predictions, filename):
     """Export predictions in API-ready JSON format"""
     results = []
 
-    for item_name in predictions.index.unique():
+    for item_name in predictions.item_ids:
         item_preds = predictions.loc[item_name]
 
         # Convert predictions to list of dictionaries
@@ -221,6 +222,6 @@ logger.info("\nAPI Integration:")
 logger.info("The JSON format is ready for FastAPI/REST API integration")
 logger.info("See Module 3 (Deployment) for API serving examples")
 logger.info("\nNext steps:")
-logger.info("1. Review predictions in {predictions_file}")
+logger.info(f"1. Review predictions in {predictions_file}")
 logger.info("2. Run '3. evaluate.py' for detailed model evaluation")
 logger.info("="*60)

@@ -14,6 +14,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)  # hide per-request logs from Hugging Face model downloads
 
 # Load configuration
 logger.info("Loading configuration from config/config.toml")
@@ -136,7 +137,7 @@ logger.info("-"*60)
 for idx, row in leaderboard.iterrows():
     model_name = row['model']
     score = row.get('score_val', 'N/A')
-    fit_time = row.get('fit_time', 'N/A')
+    fit_time = row.get('fit_time_marginal', 'N/A')
 
     # Format score
     if isinstance(score, (int, float)):
@@ -154,7 +155,7 @@ for idx, row in leaderboard.iterrows():
 
 logger.info("="*60)
 logger.info(f"Best model: {best_model}")
-logger.info(f"Evaluation metric: {eval_metric} (lower is better for MASE)")
+logger.info(f"Evaluation metric: {eval_metric} (AutoGluon reports -{eval_metric}, so higher is better)")
 logger.info("="*60)
 
 # Make predictions on test data

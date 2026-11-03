@@ -15,6 +15,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)  # hide per-request logs from Hugging Face model downloads
 
 # Load configuration
 logger.info("Loading configuration from config/config.toml")

@@ -240,16 +240,14 @@ Model Performance Comparison (Leaderboard):
 ============================================================
 Model Name                     Score           Fit Time (s)
 ------------------------------------------------------------
-WeightedEnsemble              -0.2367          0.45
-SeasonalNaive                 -0.3012          0.12
-ETS                           -0.3456          2.34
-RecursiveTabular              -0.4123          8.67
-DirectTabular                 -0.4567          7.89
-Theta                         -0.5012          1.23
-Naive                         0.0000           0.05
+WeightedEnsemble               -0.8212         0.04
+Toto2                          -0.8652         0.35
+Chronos2                       -0.8802         2.65
+SeasonalNaive                  -0.8916         0.01
+ETS                            -0.9024         0.01
 ============================================================
 Best model: WeightedEnsemble
-Evaluation metric: MASE (lower is better)
+Evaluation metric: MASE (AutoGluon reports -MASE, so higher is better)
 ============================================================
 ```
 
@@ -274,18 +272,18 @@ Calculates multiple metrics:
 {
   "per_product_metrics": {
     "BLACK VELVET": {
-      "MASE": 0.2367,
-      "RMSE": 456.78,
-      "MAE": 345.12,
-      "MAPE": 12.34
+      "MASE": 0.4543,
+      "RMSE": 995.87,
+      "MAE": 858.73,
+      "MAPE": 23.58
     }
   },
   "overall_metrics": {
     "MASE": {
-      "mean": 0.2845,
-      "std": 0.0512,
-      "min": 0.2367,
-      "max": 0.3456
+      "mean": 0.8200,
+      "std": 0.3372,
+      "min": 0.4543,
+      "max": 1.3258
     }
   }
 }
