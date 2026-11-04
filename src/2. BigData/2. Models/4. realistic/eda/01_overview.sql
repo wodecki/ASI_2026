@@ -1,0 +1,23 @@
+SELECT
+  MIN(date) AS min_date, MAX(date) AS max_date,
+  COUNT(*) AS n_rows,
+  COUNT(DISTINCT invoice_and_item_number) AS n_line_ids,
+  COUNT(DISTINCT store_number) AS n_stores,
+  COUNT(DISTINCT item_number) AS n_items,
+  COUNT(DISTINCT item_description) AS n_item_desc,
+  COUNT(DISTINCT vendor_number) AS n_vendors,
+  COUNT(DISTINCT category) AS n_categories,
+  COUNT(DISTINCT category_name) AS n_category_names,
+  COUNT(DISTINCT county) AS n_county_names,
+  COUNT(DISTINCT city) AS n_city_names,
+  SUM(sale_dollars) AS total_sales_usd,
+  SUM(bottles_sold) AS total_bottles,
+  SUM(volume_sold_liters) AS total_liters,
+  COUNTIF(store_location IS NULL) AS null_location,
+  COUNTIF(county IS NULL) AS null_county,
+  COUNTIF(category IS NULL) AS null_category,
+  COUNTIF(vendor_number IS NULL) AS null_vendor,
+  COUNTIF(bottles_sold <= 0) AS nonpos_bottles,
+  COUNTIF(sale_dollars <= 0) AS nonpos_sales,
+  COUNTIF(state_bottle_cost IS NULL OR state_bottle_retail IS NULL) AS null_price
+FROM `bigquery-public-data.iowa_liquor_sales.sales`

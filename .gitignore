@@ -38,6 +38,8 @@ runs/
 
 # Trained AutoGluon models (regenerate with the training scripts)
 autogluon-iowa-*/
+# Trained scikit-learn models (regenerate with the training scripts)
+*.joblib
 
 # Plot outputs
 plots/

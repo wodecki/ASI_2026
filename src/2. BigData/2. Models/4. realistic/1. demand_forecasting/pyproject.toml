@@ -1,0 +1,24 @@
+[project]
+name = "iowa-demand-forecasting"
+version = "0.1.0"
+description = "Use case A: weekly SKU-level demand forecast for Iowa ABD supply planning (AutoGluon time series)"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "autogluon.timeseries>=1.6.3,<1.7",  # the saved model only loads with the same AutoGluon version
+    "torch>=2.10,<2.11",  # AutoGluon 1.6 supports torch 2.10 on all platforms (macOS: <2.11)
+    "pandas>=2.3,<2.4",  # AutoGluon 1.6 does not support pandas 3 yet
+    "matplotlib>=3.10",
+    "google-cloud-bigquery>=3.45",
+    "db-dtypes>=1.7",
+    "python-dotenv>=1.2.4",
+]
+
+# On Linux (Docker images, GCP VMs) install CPU-only torch wheels (~200 MB instead of several GB of CUDA libraries).
+# On macOS the default PyPI wheels are used.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

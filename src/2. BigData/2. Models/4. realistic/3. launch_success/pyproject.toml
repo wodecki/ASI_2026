@@ -1,0 +1,12 @@
+[project]
+name = "iowa-launch-success"
+version = "0.1.0"
+description = "Use case C: predict first-year sales of new SKUs from their first 8 weeks (AutoGluon tabular)"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "autogluon.tabular[lightgbm,catboost,xgboost]>=1.6.3,<1.7",  # the saved model only loads with the same AutoGluon version
+    "pandas>=2.3,<2.4",  # AutoGluon 1.6 does not support pandas 3 yet
+    "google-cloud-bigquery>=3.45",
+    "db-dtypes>=1.7",
+    "python-dotenv>=1.2.4",
+]
