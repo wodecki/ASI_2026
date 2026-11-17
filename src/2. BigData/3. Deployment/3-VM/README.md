@@ -18,7 +18,7 @@ This guide demonstrates a fundamental cloud computing pattern: **separation of c
 - Pay for compute only when needed
 
 **Real-World Scenario:**
-- **asi-mini** (e2-micro, 2 vCPU, 1GB RAM) - Initial development, low cost
+- **asi-mini** (e2-mini, 2 vCPU, 1GB RAM) - Initial development, low cost
 - **asi-macro** (e2-standard-4, 4 vCPU, 16GB RAM) - Heavy training, higher performance
 
 Same disk, different VMs, zero data migration!
@@ -30,7 +30,7 @@ Same disk, different VMs, zero data migration!
 - **GCP account** with billing enabled
 - **External disk** `disk-20251107-123056` (100GB, created in `europe-west4-a`)
 - **Two VMs** (or create them as needed):
-  - `asi-mini` (e2-micro) - Initial setup
+  - `asi-mini` (e2-mini) - Initial setup
   - `asi-macro` (e2-standard-4) - Stronger compute
 - SSH access
 
@@ -672,7 +672,7 @@ gcloud compute instances create asi-macro \
 ```
 
 **Machine types comparison:**
-- `e2-micro`: 2 vCPU, 1GB RAM (~$7/month)
+- `e2-mini`: 2 vCPU, 1GB RAM (~$7/month)
 - `e2-standard-4`: 4 vCPU, 16GB RAM (~$120/month)
 
 **Cost tip**: Only run powerful VMs when needed!
@@ -873,7 +873,7 @@ curl http://$VM_IP:8003/predict/BLACK%20VELVET
 - **Never format an attached disk** unless intentional
 
 ### 4. Cost Optimization Strategies
-- Develop on cheap VM (`e2-micro` ~$7/month)
+- Develop on cheap VM (`e2-mini` ~$7/month)
 - Train on expensive VM (`e2-standard-4` ~$120/month)
 - Delete expensive VM after training
 - Keep only disk ($10/month for 100GB)
@@ -891,7 +891,7 @@ curl http://$VM_IP:8003/predict/BLACK%20VELVET
 
 | VM Type | vCPU | RAM | Cost/month | Use Case |
 |---------|------|-----|------------|----------|
-| e2-micro | 2 | 1 GB | ~$7 | Development, testing |
+| e2-mini | 2 | 1 GB | ~$7 | Development, testing |
 | e2-small | 2 | 2 GB | ~$15 | Light workloads |
 | e2-standard-4 | 4 | 16 GB | ~$120 | Training, production |
 | n1-standard-16 | 16 | 60 GB | ~$570 | Heavy training |
