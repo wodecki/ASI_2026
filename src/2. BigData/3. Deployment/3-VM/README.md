@@ -18,7 +18,7 @@ This guide demonstrates a fundamental cloud computing pattern: **separation of c
 - Pay for compute only when needed
 
 **Real-World Scenario:**
-- **asi-micro** (e2-micro, 2 vCPU, 1GB RAM) - Initial development, low cost
+- **asi-mini** (e2-micro, 2 vCPU, 1GB RAM) - Initial development, low cost
 - **asi-macro** (e2-standard-4, 4 vCPU, 16GB RAM) - Heavy training, higher performance
 
 Same disk, different VMs, zero data migration!
@@ -30,13 +30,13 @@ Same disk, different VMs, zero data migration!
 - **GCP account** with billing enabled
 - **External disk** `disk-20251107-123056` (100GB, created in `europe-west4-a`)
 - **Two VMs** (or create them as needed):
-  - `asi-micro` (e2-micro) - Initial setup
+  - `asi-mini` (e2-micro) - Initial setup
   - `asi-macro` (e2-standard-4) - Stronger compute
 - SSH access
 
 ---
 
-# Part 1: Initial Setup on Small VM (asi-micro)
+# Part 1: Initial Setup on Small VM (asi-mini)
 
 This section covers first-time setup: format disk, install dependencies, train model.
 
@@ -51,14 +51,14 @@ The external disk must be attached to the running VM.
 1. Go to **Compute Engine** > **Disks**
 2. Click on `disk-20251107-123056`
 3. Click **ATTACH** (top menu)
-4. Select VM: `asi-micro`
+4. Select VM: `asi-mini`
 5. Mode: **Read/write**
 6. Click **ATTACH**
 
 ### Option B: Via gcloud CLI
 
 ```bash
-gcloud compute instances attach-disk asi-micro \
+gcloud compute instances attach-disk asi-mini \
   --disk disk-20251107-123056 \
   --zone europe-west4-a
 ```
@@ -66,7 +66,7 @@ gcloud compute instances attach-disk asi-micro \
 **Verify attachment:**
 ```bash
 # SSH into VM
-gcloud compute ssh asi-micro --zone europe-west4-a
+gcloud compute ssh asi-mini --zone europe-west4-a
 
 # List attached disks
 lsblk
@@ -227,6 +227,26 @@ export PATH="$HOME/.local/bin:$PATH"
 uv --version
 ```
 
+### Move uv cache and Python installs to the external disk
+
+**IMPORTANT**: By default uv stores its download cache in `~/.cache/uv` and the Python interpreters it installs in `~/.local/share/uv/python`. Both live on the **10GB boot disk**. AutoGluon pulls in PyTorch and other large packages (several GB), so `uv sync` fails with `No space left on device (os error 28)` even though the project itself is on `/mnt/data`.
+
+Point uv at the external disk instead:
+
+```bash
+# Store uv cache and Python installs on the external disk (permanently)
+cat >> ~/.bashrc <<'EOF'
+export UV_CACHE_DIR=/mnt/data/.cache/uv
+export UV_PYTHON_INSTALL_DIR=/mnt/data/.local/share/uv/python
+EOF
+source ~/.bashrc
+
+# Verify
+uv cache dir   # Should show /mnt/data/.cache/uv
+```
+
+**Bonus**: with the cache and `.venv` on the same filesystem, uv hardlinks packages instead of copying them - faster installs and less disk usage.
+
 ---
 
 ## Step 4: Clone Repository to External Disk
@@ -295,7 +315,7 @@ gcloud compute firewall-rules list --filter="name=allow-iowa-api"
 ### Get VM external IP
 
 ```bash
-gcloud compute instances describe asi-micro \
+gcloud compute instances describe asi-mini \
   --zone europe-west4-a \
   --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
 ```
@@ -388,8 +408,10 @@ After=network.target
 Type=simple
 User=YOUR_USERNAME
 WorkingDirectory=/mnt/data/ASI_2026/src/2. BigData/3. Deployment/1-local/backend
-Environment="PATH=/home/YOUR_USERNAME/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
-ExecStart=/home/YOUR_USERNAME/.cargo/bin/uv run uvicorn main:app --host 0.0.0.0 --port 8003
+Environment="PATH=/home/YOUR_USERNAME/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="UV_CACHE_DIR=/mnt/data/.cache/uv"
+Environment="UV_PYTHON_INSTALL_DIR=/mnt/data/.local/share/uv/python"
+ExecStart=/home/YOUR_USERNAME/.local/bin/uv run uvicorn main:app --host 0.0.0.0 --port 8003
 Restart=always
 RestartSec=10
 
@@ -447,6 +469,26 @@ pwd  # Should show /mnt/data/...
 # Clean up if needed
 sudo apt autoremove -y
 sudo apt clean
+sudo journalctl --vacuum-size=50M
+```
+
+**`uv sync` fails with `No space left on device (os error 28)`** while `/` is at 100% and `/mnt/data` has plenty of space: uv's cache and Python installs are on the boot disk. Move them to the external disk (see Part 1, Step 3):
+
+```bash
+# Free the space taken on / by the failed sync
+uv cache clean
+rm -rf ~/.local/share/uv/python
+
+# Point uv to the external disk
+cat >> ~/.bashrc <<'EOF'
+export UV_CACHE_DIR=/mnt/data/.cache/uv
+export UV_PYTHON_INSTALL_DIR=/mnt/data/.local/share/uv/python
+EOF
+source ~/.bashrc
+
+# Rebuild the environment
+rm -rf .venv
+uv sync
 ```
 
 ### API not accessible from internet
@@ -497,13 +539,13 @@ uv sync --python 3.12
 
 ```bash
 # Stop current VM (keeps disk attached)
-gcloud compute instances stop asi-micro --zone europe-west4-a
+gcloud compute instances stop asi-mini --zone europe-west4-a
 
 # Or stop the stronger VM
 gcloud compute instances stop asi-macro --zone europe-west4-a
 
 # Start VM
-gcloud compute instances start asi-micro --zone europe-west4-a
+gcloud compute instances start asi-mini --zone europe-west4-a
 
 # After start, remount disk if needed
 sudo mount -a
@@ -526,17 +568,17 @@ gcloud compute instances detach-disk asi-macro --disk disk-20251107-123056 --zon
 gcloud compute instances delete asi-macro --zone europe-west4-a
 
 # 3. Attach disk back to cheap VM
-gcloud compute instances attach-disk asi-micro --disk disk-20251107-123056 --zone europe-west4-a
+gcloud compute instances attach-disk asi-mini --disk disk-20251107-123056 --zone europe-west4-a
 
 # 4. SSH and mount
-gcloud compute ssh asi-micro --zone europe-west4-a
+gcloud compute ssh asi-mini --zone europe-west4-a
 sudo mount /dev/sda /mnt/data
 
 # Your models are still there! Only paying ~$7/month for VM + $10/month for disk.
 ```
 
 **Monthly costs:**
-- asi-micro + 100GB disk = ~$17/month
+- asi-mini + 100GB disk = ~$17/month
 - asi-macro + 100GB disk = ~$130/month
 - Disk only (no VM) = ~$10/month
 
@@ -546,17 +588,17 @@ sudo mount /dev/sda /mnt/data
 
 This demonstrates **disk portability** - move your entire workspace to a more powerful VM without re-cloning or re-training!
 
-**Scenario**: You've been developing on `asi-micro` (cheap, slow). Now you need more power for production or heavy workloads. **Solution**: Move disk to `asi-macro` (expensive, fast).
+**Scenario**: You've been developing on `asi-mini` (cheap, slow). Now you need more power for production or heavy workloads. **Solution**: Move disk to `asi-macro` (expensive, fast).
 
 ---
 
-## Step 1: Safely Detach Disk from asi-micro
+## Step 1: Safely Detach Disk from asi-mini
 
 ### Stop the API service (if running)
 
 ```bash
-# SSH into asi-micro
-gcloud compute ssh asi-micro --zone europe-west4-a
+# SSH into asi-mini
+gcloud compute ssh asi-mini --zone europe-west4-a
 
 # If using screen
 screen -ls
@@ -589,11 +631,11 @@ exit
 ### Stop the VM
 
 ```bash
-# Stop asi-micro (from your local machine)
-gcloud compute instances stop asi-micro --zone europe-west4-a
+# Stop asi-mini (from your local machine)
+gcloud compute instances stop asi-mini --zone europe-west4-a
 
 # Wait for VM to stop
-gcloud compute instances describe asi-micro --zone europe-west4-a --format='get(status)'
+gcloud compute instances describe asi-mini --zone europe-west4-a --format='get(status)'
 # Should show: TERMINATED
 ```
 
@@ -602,13 +644,13 @@ gcloud compute instances describe asi-micro --zone europe-west4-a --format='get(
 **Via Web Console:**
 1. Go to **Compute Engine** > **Disks**
 2. Click `disk-20251107-123056`
-3. If "In use by" shows `asi-micro`, click **DETACH** (wait for VM to stop first)
+3. If "In use by" shows `asi-mini`, click **DETACH** (wait for VM to stop first)
 4. Disk status should change to "Ready"
 
 **Via gcloud CLI:**
 
 ```bash
-gcloud compute instances detach-disk asi-micro \
+gcloud compute instances detach-disk asi-mini \
   --disk disk-20251107-123056 \
   --zone europe-west4-a
 ```
@@ -724,9 +766,19 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 source $HOME/.local/bin/env
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
+# Keep uv cache and Python installs on the external disk (boot disk is only 10GB)
+cat >> ~/.bashrc <<'EOF'
+export UV_CACHE_DIR=/mnt/data/.cache/uv
+export UV_PYTHON_INSTALL_DIR=/mnt/data/.local/share/uv/python
+EOF
+source ~/.bashrc
+
 # Verify
 uv --version
+uv cache dir   # Should show /mnt/data/.cache/uv
 ```
+
+**Note**: the Python 3.12 interpreter and uv cache from asi-mini are already on the disk, so `uv sync` on asi-macro reuses them - no re-download needed.
 
 ---
 
@@ -867,8 +919,8 @@ curl http://$VM_IP:8003/predict/BLACK%20VELVET
 - `GET /predict/{item_name}` - Get 7-day forecast
 
 **Disk layout:**
-- `/` (10GB boot disk) - OS, Python, uv
-- `/mnt/data` (100GB external disk) - Code, models, data (portable!)
+- `/` (10GB boot disk) - OS, uv binary
+- `/mnt/data` (100GB external disk) - Code, models, data, Python 3.12, uv cache (portable!)
 
 **Production considerations:**
 - Add HTTPS with Let's Encrypt

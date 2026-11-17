@@ -3,7 +3,7 @@ import streamlit as st
 import requests
 import pandas as pd
 
-API_URL = os.getenv("API_URL", "http://localhost:8003")
+API_URL = os.getenv("API_URL", "https://iowa-backend-140107942098.europe-west4.run.app")
 
 ITEMS = [
     'BLACK VELVET',
