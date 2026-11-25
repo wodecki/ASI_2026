@@ -25,6 +25,10 @@ echo "Image: ${IMAGE_URL}"
 echo ""
 
 # Deploy to Cloud Run
+# --concurrency 1: one instance computes one prediction at a time, so Cloud Run
+#   sends each extra concurrent request to another instance (scales out) instead of
+#   queueing up to 80 requests inside one instance (the default).
+# --max-instances 20: upper limit of the scale-out (and of the cost).
 gcloud run deploy ${SERVICE_NAME} \
   --project ${PROJECT_ID} \
   --image ${IMAGE_URL} \
@@ -33,7 +37,8 @@ gcloud run deploy ${SERVICE_NAME} \
   --memory 2Gi \
   --cpu 2 \
   --port 8080 \
-  --max-instances 10
+  --concurrency 1 \
+  --max-instances 20
 
 echo ""
 echo "✓ Deployment complete!"

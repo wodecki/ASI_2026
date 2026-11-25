@@ -137,12 +137,13 @@ Choose one of the three options. All create the same service.
 2. **Container image URL** → **Select** → **Artifact Registry** → `iowa` → `iowa-backend` → tag **`v1`**.
 3. **Service name**: `iowa-backend`. **Region**: `europe-west4`.
 4. **Authentication**: **Allow public access** (unauthenticated invocations).
-5. **Billing**: Request-based. **Scaling**: minimum instances **0**, maximum **10**.
+5. **Billing**: Request-based. **Scaling**: minimum instances **0**, maximum **20**.
 6. **Ingress**: **All**.
 7. Expand **Containers, Volumes, Networking, Security** → tab **Settings**:
    - **Container port**: `8080`
    - **Memory**: **`2 GiB`** and **CPU**: **`2`** - change both! The form defaults to 512 MiB / 1 CPU, which is too little for AutoGluon (see [Troubleshooting](#troubleshooting)).
    - **Request timeout**: `300` seconds
+   - **Maximum concurrent requests per instance**: **`1`** (default 80 - see [Why concurrency 1?](#why-concurrency-1))
    - **Startup CPU boost**: on
 8. Click **Create** and wait for the green check mark. The service URL is shown at the top of the service page.
 
@@ -152,7 +153,7 @@ Choose one of the three options. All create the same service.
 2. Click the version you want to deploy - the one tagged **`v1`** (media type `application/vnd.oci.image.index.v1+json`, see [above](#what-you-see-in-artifact-registry)).
 3. Click **Deploy** at the top of the version page → **Deploy to Cloud Run**.
 4. The Cloud Run form opens with **Container image URL** already filled in. It usually points to the version by digest (`.../iowa-backend@sha256:fc86b03…`), not by tag. This pins exactly this build: pushing a new `v1` later will not change what this form deploys.
-5. Fill in the rest of the form as in **Option A, steps 3-8**. In particular, set **Memory `2 GiB`** and **CPU `2`**. The form defaults to 512 MiB / 1 CPU here too.
+5. Fill in the rest of the form as in **Option A, steps 3-8**. In particular, set **Memory `2 GiB`**, **CPU `2`**, **maximum concurrent requests `1`** and **maximum instances `20`**. The form defaults to 512 MiB / 1 CPU / 80 here too.
 
 You can also click **Deploy** on the image version (`application/vnd.oci.image.manifest.v1+json`, ~755 MB). The result is the same: both versions lead Cloud Run to the same `linux/amd64` image.
 
@@ -167,7 +168,8 @@ This script deploys the image to Cloud Run (by tag `IMAGE_TAG` from `.env`) with
 - `--cpu 2` - Faster predictions
 - `--allow-unauthenticated` - Public access (no auth)
 - `--port 8080` - Cloud Run's default port
-- `--max-instances 10` - Cost control
+- `--concurrency 1` - One request per instance (see below)
+- `--max-instances 20` - Cost control
 
 Get the service URL (the command is also printed at the end of `deploy.sh`):
 ```bash
@@ -180,6 +182,12 @@ https://iowa-backend-XXXXXXXXXX.europe-west4.run.app
 ```
 
 Every deploy (Option A, B or C) creates a new **revision** (`iowa-backend-00001-xxx`, `-00002-xxx`, ...); the **Revisions** tab of the service shows them and how traffic is split between them.
+
+#### Why concurrency 1?
+
+`main.py` computes one prediction at a time: `predictor.predict()` blocks the server's event loop for about 1 s, so a second request waits until the first one is finished. Cloud Run does not know that. With the default of **80 concurrent requests per instance**, it sends up to 80 requests to one instance, where 79 of them wait in a queue, and adds instances only slowly. Under load, response times then grow with every new user (observed: median ~52 s at 820 users, 10 instances).
+
+With **concurrency 1**, every request that cannot be served immediately makes Cloud Run start another instance - this is the scale-out the load test in `4. Performance` demonstrates. The limit is **max instances**: when all 20 instances are busy, extra requests wait and eventually fail with *"The request was aborted after waiting too long for an available instance"* (HTTP 429).
 
 ### 4. Test
 
@@ -248,6 +256,8 @@ How to read them:
 - **Deployed from the console with default resources (512 MiB)** → the first prediction needs ~640 MB of RAM, and the downloaded model weights are stored in the container's in-memory filesystem, which also counts against the limit. The instance is killed for exceeding memory. Use **2 GiB**.
 - First prediction slow (~40 s) or the frontend times out → expected on a new instance (weights download); warm it up with `curl` or set minimum instances to 1
 - `gcloud` reports `invalid_grant` → token expired, run `gcloud auth login`
+- Response times keep growing under load, instance count stays low → maximum concurrent requests per instance is still 80; set it to 1 (see [Why concurrency 1?](#why-concurrency-1))
+- HTTP 429 *"aborted after waiting too long for an available instance"* / *"Rate exceeded."* → all `max-instances` are busy; reduce the load or raise the limit
 
 **Update deployment:**
 ```bash

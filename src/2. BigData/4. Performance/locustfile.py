@@ -1,13 +1,14 @@
 from locust import HttpUser, task, between
 import random
 
-# Sample items to test with
+# The 5 products the model was trained on (same list as GET /items returns).
+# A name outside this list gets 404 and would be counted as a failure.
 ITEMS = [
     "BLACK VELVET",
-    "JACK DANIELS",
-    "CAPTAIN MORGAN",
-    "JAGERMEISTER",
-    "BACARDI",
+    "FIREBALL CINNAMON WHISKEY",
+    "HAWKEYE VODKA",
+    "TITOS HANDMADE VODKA",
+    "FIVE O'CLOCK VODKA",
 ]
 
 
