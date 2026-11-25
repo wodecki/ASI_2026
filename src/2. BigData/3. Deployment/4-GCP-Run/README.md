@@ -18,9 +18,13 @@ nano .env
 # Build and push to Artifact Registry
 ./build.sh
 
-# Deploy to Cloud Run
+# Deploy to Cloud Run - from the web console (Cloud Run → Deploy container,
+# or Artifact Registry → iowa-backend → v1 → Deploy; set 2 GiB memory, 2 CPU!)
+# or with the script:
 ./deploy.sh
 ```
+
+Before deploying, read [Images, indexes, containers and revisions](backend/README.md#images-indexes-containers-and-revisions) - it explains what `build.sh` puts in Artifact Registry and which version to deploy.
 
 ## What's Inside
 
@@ -56,6 +60,8 @@ nano .env
 
 See **[backend/README.md](backend/README.md)** for:
 - Detailed setup instructions
+- Image vs index vs container vs revision
+- Deploying from the web console or with `deploy.sh`
 - GCP project configuration
 - Deployment walkthrough
 - Testing & troubleshooting
